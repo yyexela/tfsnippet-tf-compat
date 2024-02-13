@@ -1,7 +1,8 @@
 from contextlib import contextmanager
 
 import six
-import tensorflow as tf
+import tensorflow.compat.v1 as tf
+tf.disable_v2_behavior()
 from tensorflow.python.ops import variable_scope as variable_scope_ops
 
 __all__ = [

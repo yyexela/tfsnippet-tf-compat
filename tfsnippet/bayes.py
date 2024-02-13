@@ -2,7 +2,8 @@ import warnings
 from collections import OrderedDict
 
 import six
-import tensorflow as tf
+import tensorflow.compat.v1 as tf
+tf.disable_v2_behavior()
 from frozendict import frozendict
 
 from tfsnippet.distributions import (Distribution, FlowDistribution,

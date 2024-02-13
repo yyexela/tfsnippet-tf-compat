@@ -1,6 +1,7 @@
 import contextlib
 
-import tensorflow as tf
+import tensorflow.compat.v1 as tf
+tf.disable_v2_behavior()
 import zhusuan
 
 from tfsnippet.utils import get_default_scope_name

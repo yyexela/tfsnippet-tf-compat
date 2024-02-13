@@ -1,4 +1,5 @@
-import tensorflow as tf
+import tensorflow.compat.v1 as tf
+tf.disable_v2_behavior()
 from tensorflow.contrib.framework import add_arg_scope
 
 from tfsnippet.utils import (ParamSpec,

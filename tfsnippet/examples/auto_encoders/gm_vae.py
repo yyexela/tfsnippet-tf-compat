@@ -5,7 +5,8 @@ import sys
 import warnings
 from argparse import ArgumentParser
 
-import tensorflow as tf
+import tensorflow.compat.v1 as tf
+tf.disable_v2_behavior()
 from pprint import pformat
 from sklearn.metrics import accuracy_score
 from tensorflow.contrib.framework import arg_scope, add_arg_scope

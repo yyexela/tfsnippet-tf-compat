@@ -3,7 +3,8 @@ import traceback
 from contextlib import contextmanager
 
 import six
-import tensorflow as tf
+import tensorflow.compat.v1 as tf
+tf.disable_v2_behavior()
 
 from tfsnippet.utils import (is_tensor_object,
                              is_tensorflow_version_higher_or_equal)

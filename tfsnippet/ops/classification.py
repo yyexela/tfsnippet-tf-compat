@@ -1,4 +1,5 @@
-import tensorflow as tf
+import tensorflow.compat.v1 as tf
+tf.disable_v2_behavior()
 
 from tfsnippet.utils import add_name_arg_doc, InputSpec, get_static_shape
 

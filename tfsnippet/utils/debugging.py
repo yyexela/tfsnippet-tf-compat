@@ -1,6 +1,7 @@
 from contextlib import contextmanager
 
-import tensorflow as tf
+import tensorflow.compat.v1 as tf
+tf.disable_v2_behavior()
 
 from .deprecation import deprecated
 from .doc_utils import add_name_arg_doc

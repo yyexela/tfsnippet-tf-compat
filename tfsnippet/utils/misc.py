@@ -6,7 +6,8 @@ import time
 from contextlib import contextmanager
 
 import numpy as np
-import tensorflow as tf
+import tensorflow.compat.v1 as tf
+tf.disable_v2_behavior()
 
 from .type_utils import is_integer, TensorArgValidator, is_tensor_object
 
