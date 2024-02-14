@@ -1,6 +1,6 @@
 import tensorflow.compat.v1 as tf
 tf.disable_v2_behavior()
-from tensorflow.contrib.framework import add_arg_scope
+from tf_slim import add_arg_scope
 
 from tfsnippet.utils import (ParamSpec,
                              get_static_shape,

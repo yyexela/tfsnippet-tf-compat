@@ -1,7 +1,7 @@
 import numpy as np
 import tensorflow.compat.v1 as tf
 tf.disable_v2_behavior()
-from tensorflow.contrib.framework import add_arg_scope
+from tf_slim import add_arg_scope
 
 from tfsnippet.ops import assert_rank, assert_scalar_equal
 from tfsnippet.utils import (validate_positive_int_arg, ParamSpec,

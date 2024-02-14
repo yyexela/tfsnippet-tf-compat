@@ -1,7 +1,7 @@
 import numpy as np
 import tensorflow.compat.v1 as tf
 tf.disable_v2_behavior()
-from tensorflow.contrib.framework import add_arg_scope
+from tf_slim import add_arg_scope
 
 from tfsnippet.layers.flows.utils import (broadcast_log_det_against_input,
                                           ExpScale, LinearScale)

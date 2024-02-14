@@ -6,7 +6,7 @@ from argparse import ArgumentParser
 import tensorflow.compat.v1 as tf
 tf.disable_v2_behavior()
 from pprint import pformat
-from tensorflow.contrib.framework import arg_scope, add_arg_scope
+from tf_slim import arg_scope, add_arg_scope
 
 import tfsnippet as spt
 from tfsnippet.examples.utils import (MLResults,
