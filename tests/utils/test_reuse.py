@@ -6,27 +6,27 @@ from tfsnippet.utils import *
 
 
 def _make_var_and_op():
-    vs = tf.get_variable_scope()
+    vs = tf.compat.v1.get_variable_scope()
     assert(vs.name == get_reuse_stack_top().name)
-    var = tf.get_variable('var', shape=(), dtype=tf.float32)
+    var = tf.compat.v1.get_variable('var', shape=(), dtype=tf.float32)
     op = tf.add(1, 2, name='op')
     return vs, var, op
 
 
 def _make_variable_scope():
-    vs = tf.get_variable_scope()
+    vs = tf.compat.v1.get_variable_scope()
     assert(vs.name == get_reuse_stack_top().name)
-    var = tf.get_variable('var', shape=(), dtype=tf.float32)
+    var = tf.compat.v1.get_variable('var', shape=(), dtype=tf.float32)
     return vs, var
 
 
 def _make_variable_scopes():
-    vs = tf.get_variable_scope()
+    vs = tf.compat.v1.get_variable_scope()
     assert(vs.name == get_reuse_stack_top().name)
     with tf.variable_scope(None, default_name='vs') as vs1:
-        var1 = tf.get_variable('var', shape=(), dtype=tf.float32)
+        var1 = tf.compat.v1.get_variable('var', shape=(), dtype=tf.float32)
     with tf.variable_scope(None, default_name='vs') as vs2:
-        var2 = tf.get_variable('var', shape=(), dtype=tf.float32)
+        var2 = tf.compat.v1.get_variable('var', shape=(), dtype=tf.float32)
     return (vs1, var1), (vs2, var2)
 
 
@@ -44,7 +44,7 @@ class InstanceReuseTestCase(tf.test.TestCase):
         obj = _Reusable()
         with pytest.raises(TypeError, match='`variable_scope` attribute of '
                                             'the instance .* is expected to '
-                                            'be a `tf.VariableScope`.*'):
+                                            'be a `tf.compat.v1.VariableScope`.*'):
             obj.f()
 
         with pytest.raises(TypeError, match='`method` seems not to be an '
@@ -229,15 +229,15 @@ class InstanceReuseTestCase(tf.test.TestCase):
         class MyScopeObject(VarScopeObject):
             @instance_reuse('foo')
             def foo_1(self):
-                return tf.get_variable('bar', shape=())
+                return tf.compat.v1.get_variable('bar', shape=())
 
             @instance_reuse('foo')
             def foo_2(self):
-                return tf.get_variable('bar', shape=())
+                return tf.compat.v1.get_variable('bar', shape=())
 
             @instance_reuse('foo')
             def foo_3(self):
-                return tf.get_variable('bar2', shape=())
+                return tf.compat.v1.get_variable('bar2', shape=())
 
         with tf.Graph().as_default():
             o = MyScopeObject('o')
@@ -273,7 +273,7 @@ class GlobalReuseTestCase(tf.test.TestCase):
                                              '"/" in scope name'):
             @global_reuse('nested/scope')
             def nested_scope():
-                return tf.get_variable('var', shape=(), dtype=tf.float32)
+                return tf.compat.v1.get_variable('var', shape=(), dtype=tf.float32)
 
     def test_create_in_root_scope(self):
         @global_reuse('the_scope')
@@ -629,7 +629,7 @@ class VarScopeObjectTestCase(tf.test.TestCase):
                 super(MyVarScopeObj, self).__init__(name=name, scope=scope)
                 with reopen_variable_scope(self.variable_scope) as vs:
                     self.vs = vs
-                    self.a = tf.get_variable('a', shape=(), dtype=tf.float32)
+                    self.a = tf.compat.v1.get_variable('a', shape=(), dtype=tf.float32)
                     self.op = tf.add(1, 2, name='op')
 
         o = MyVarScopeObj(name='o')

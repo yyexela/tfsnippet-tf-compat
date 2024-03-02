@@ -31,7 +31,7 @@ def assert_variables(names, exist=True, trainable=None, scope=None,
                       for v in tf.trainable_variables()}
     collections = list(collections or ())
     collection_vars = [
-        {normalize_name(v.name): v for v in tf.get_collection(c)}
+        {normalize_name(v.name): v for v in tf.compat.v1.get_collection(c)}
         for c in collections
     ]
 

@@ -41,7 +41,7 @@ class ReshapeFlowTestCase(tf.test.TestCase):
 
             # test 3 -> [-1], dynamic shape
             x = np.random.normal(size=[2, 3, 4, 5])
-            x_ph = tf.placeholder(dtype=tf.float32, shape=[None] * 4)
+            x_ph = tf.compat.v1.placeholder(dtype=tf.float32, shape=[None] * 4)
             check(x, 3, [-1], x_ph=x_ph)
 
             # test 1 -> [-1, 2, 3], static shape
@@ -50,17 +50,17 @@ class ReshapeFlowTestCase(tf.test.TestCase):
 
             # test 1 -> [-1, 2, 3], dynamic shape
             x = np.random.normal(size=[5, 12])
-            x_ph = tf.placeholder(dtype=tf.float32, shape=[None] * 2)
+            x_ph = tf.compat.v1.placeholder(dtype=tf.float32, shape=[None] * 2)
             check(x, 1, [-1, 2, 3], x_ph=x_ph)
 
             # test 0 -> [], dynamic shape
             x = np.random.normal(size=[5, 12])
-            x_ph = tf.placeholder(dtype=tf.float32, shape=[None] * 2)
+            x_ph = tf.compat.v1.placeholder(dtype=tf.float32, shape=[None] * 2)
             check(x, 0, [], x_ph=x_ph)
 
             # test 0 -> [-1], dynamic shape
             x = np.random.normal(size=[5, 12])
-            x_ph = tf.placeholder(dtype=tf.float32, shape=[None] * 2)
+            x_ph = tf.compat.v1.placeholder(dtype=tf.float32, shape=[None] * 2)
             check(x, 0, [-1], x_ph=x_ph)
 
         # test 3 -> [7], static shape, error
@@ -137,6 +137,6 @@ class SpaceToDepthFlowTestCase(tf.test.TestCase):
 
             # test dynamic shape, bs=3, channels_last = True
             x = np.random.normal(size=[4, 7, 5, 6, 9])
-            x_ph = tf.placeholder(shape=[None, None, 5, None, None],
+            x_ph = tf.compat.v1.placeholder(shape=[None, None, 5, None, None],
                                   dtype=tf.float32)
             check(x, (4, 7, 45, 2, 3), 3, channels_last=False, x_ph=x_ph)

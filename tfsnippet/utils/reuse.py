@@ -68,7 +68,7 @@ def instance_reuse(method_or_scope=None, _sentinel=None, scope=None):
 
             @instance_reuse
             def bar(self):
-                return tf.get_variable('bar', ...)
+                return tf.compat.v1.get_variable('bar', ...)
 
         foo = Foo()
         bar = foo.bar()
@@ -86,7 +86,7 @@ def instance_reuse(method_or_scope=None, _sentinel=None, scope=None):
             @instance_reuse('scope_name')
             def foo(self):
                 # name will be self.variable_scope.name + '/foo/bar'
-                return tf.get_variable('bar', ...)
+                return tf.compat.v1.get_variable('bar', ...)
 
     Unlike the behavior of :func:`global_reuse`, if you have two methods
     sharing the same scope name, they will indeed use the same variable scope.
@@ -98,16 +98,16 @@ def instance_reuse(method_or_scope=None, _sentinel=None, scope=None):
 
             @instance_reuse('foo')
             def foo_1(self):
-                return tf.get_variable('bar', ...)
+                return tf.compat.v1.get_variable('bar', ...)
 
             @instance_reuse('foo')
             def foo_2(self):
-                return tf.get_variable('bar', ...)
+                return tf.compat.v1.get_variable('bar', ...)
 
 
             @instance_reuse('foo')
             def foo_2(self):
-                return tf.get_variable('bar2', ...)
+                return tf.compat.v1.get_variable('bar2', ...)
 
         foo = Foo()
         foo.foo_1()  # its name should be variable_scope.name + '/foo/bar'
@@ -191,9 +191,9 @@ def instance_reuse(method_or_scope=None, _sentinel=None, scope=None):
         obj = args[0]
         obj_vs = obj.variable_scope
 
-        if not isinstance(obj_vs, tf.VariableScope):
+        if not isinstance(obj_vs, tf.compat.v1.VariableScope):
             raise TypeError('`variable_scope` attribute of the instance {!r} '
-                            'is expected to be a `tf.VariableScope`, but got '
+                            'is expected to be a `tf.compat.v1.VariableScope`, but got '
                             '{!r}'.format(obj, obj_vs))
 
         # now ready to create the variable scope for the method
@@ -208,7 +208,7 @@ def instance_reuse(method_or_scope=None, _sentinel=None, scope=None):
             #   name scope.  So we should exit the scope, then re-enter our
             #   desired variable scope.
             if graph.get_name_scope() + '/' != obj_vs.original_name_scope or \
-                    tf.get_variable_scope().name != obj_vs.name:
+                    tf.compat.v1.get_variable_scope().name != obj_vs.name:
                 with tf.variable_scope(obj_vs, auxiliary_name_scope=False):
                     with tf.name_scope(obj_vs.original_name_scope):
                         # now we are here in the object's variable scope, and
@@ -251,7 +251,7 @@ def global_reuse(method_or_scope=None, _sentinel=None, scope=None):
 
         @global_reuse
         def foo():
-            return tf.get_variable('bar', ...)
+            return tf.compat.v1.get_variable('bar', ...)
 
         bar = foo()
         bar_2 = foo()
@@ -265,8 +265,8 @@ def global_reuse(method_or_scope=None, _sentinel=None, scope=None):
 
         @global_reuse('dense')
         def dense_layer(inputs):
-            w = tf.get_variable('w', ...)  # name will be 'dense/w'
-            b = tf.get_variable('b', ...)  # name will be 'dense/b'
+            w = tf.compat.v1.get_variable('w', ...)  # name will be 'dense/w'
+            b = tf.compat.v1.get_variable('b', ...)  # name will be 'dense/b'
             return tf.matmul(w, inputs) + b
 
     If you have two functions sharing the same scope name, they will not
@@ -277,11 +277,11 @@ def global_reuse(method_or_scope=None, _sentinel=None, scope=None):
 
         @global_reuse('foo')
         def foo_1():
-            return tf.get_variable('bar', ...)
+            return tf.compat.v1.get_variable('bar', ...)
 
         @global_reuse('foo')
         def foo_2():
-            return tf.get_variable('bar', ...)
+            return tf.compat.v1.get_variable('bar', ...)
 
         assert(foo_1().name == 'foo/bar')
         assert(foo_2().name == 'foo_1/bar')
@@ -333,7 +333,7 @@ def global_reuse(method_or_scope=None, _sentinel=None, scope=None):
             #   new variable scope, we will not be in the correct name scope.
             #   So we should exit the scope, then re-enter our desired
             #   variable scope.
-            if graph.get_name_scope() or tf.get_variable_scope().name:
+            if graph.get_name_scope() or tf.compat.v1.get_variable_scope().name:
                 with root_variable_scope():
                     with tf.variable_scope(None, default_name=scope) as vs:
                         variable_scopes[graph] = vs
@@ -372,7 +372,7 @@ class VarScopeObject(object):
 
             @instance_reuse
             def foo(self):
-                return tf.get_variable('bar', ...)
+                return tf.compat.v1.get_variable('bar', ...)
 
         o = YourVarScopeObject('object_name')
         o.foo()  # You should get a variable with name "object_name/foo/bar"
@@ -387,7 +387,7 @@ class VarScopeObject(object):
             def __init__(self, name=None, scope=None):
                 super(YourVarScopeObject, self).__init__(name=name, scope=scope)
                 with reopen_variable_scope(self.variable_scope):
-                    self.w = tf.get_variable('w', ...)
+                    self.w = tf.compat.v1.get_variable('w', ...)
 
     See Also:
         :func:`tfsnippet.utils.instance_reuse`.
@@ -411,8 +411,8 @@ class VarScopeObject(object):
         else:
             default_name = name
 
-        with tf.variable_scope(scope, default_name=default_name) as vs:
-            self._variable_scope = vs       # type: tf.VariableScope
+        with tf.compat.v1.variable_scope(scope, default_name=default_name) as vs:
+            self._variable_scope = vs       # type: tf.compat.v1.VariableScope
             self._name = name
 
     def __repr__(self):

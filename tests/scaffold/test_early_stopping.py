@@ -19,9 +19,9 @@ def set_variable_values(variables, values):
 
 
 def _populate_variables():
-    a = tf.get_variable('a', shape=(), dtype=tf.int32)
-    b = tf.get_variable('b', shape=(), dtype=tf.int32)
-    c = tf.get_variable('c', shape=(), dtype=tf.int32)
+    a = tf.compat.v1.get_variable('a', shape=(), dtype=tf.int32)
+    b = tf.compat.v1.get_variable('b', shape=(), dtype=tf.int32)
+    c = tf.compat.v1.get_variable('c', shape=(), dtype=tf.int32)
     set_variable_values([a, b, c], [1, 2, 3])
     return [a, b, c]
 

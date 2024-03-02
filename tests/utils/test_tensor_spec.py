@@ -124,7 +124,7 @@ class TensorSpecTestCase(tf.test.TestCase):
         # test empty validation
         s = _TensorSpec()
         good(s, tf.constant(1))
-        good(s, tf.placeholder(tf.float32, None))
+        good(s, tf.compat.v1.placeholder(tf.float32, None))
 
         # test dtype
         s = _TensorSpec(dtype=tf.int64)
@@ -133,55 +133,55 @@ class TensorSpecTestCase(tf.test.TestCase):
 
         # test empty shape
         s = _TensorSpec(shape=())
-        good(s, tf.placeholder(tf.float32, ()))
-        bad_shape(s, tf.placeholder(tf.float32, None))
-        bad_shape(s, tf.placeholder(tf.float32, [2]))
-        bad_shape(s, tf.placeholder(tf.float32, [2, 2]))
-        bad_shape(s, tf.placeholder(tf.float32, [3, 1, 2]))
+        good(s, tf.compat.v1.placeholder(tf.float32, ()))
+        bad_shape(s, tf.compat.v1.placeholder(tf.float32, None))
+        bad_shape(s, tf.compat.v1.placeholder(tf.float32, [2]))
+        bad_shape(s, tf.compat.v1.placeholder(tf.float32, [2, 2]))
+        bad_shape(s, tf.compat.v1.placeholder(tf.float32, [3, 1, 2]))
 
         # test static shape
         s = _TensorSpec(shape=(1, 2))
-        good(s, tf.placeholder(tf.float32, [1, 2]))
-        bad_shape(s, tf.placeholder(tf.float32, None))
-        bad_shape(s, tf.placeholder(tf.float32, ()))
-        bad_shape(s, tf.placeholder(tf.float32, [2]))
-        bad_shape(s, tf.placeholder(tf.float32, [2, 2]))
-        bad_shape(s, tf.placeholder(tf.float32, [3, 1, 2]))
+        good(s, tf.compat.v1.placeholder(tf.float32, [1, 2]))
+        bad_shape(s, tf.compat.v1.placeholder(tf.float32, None))
+        bad_shape(s, tf.compat.v1.placeholder(tf.float32, ()))
+        bad_shape(s, tf.compat.v1.placeholder(tf.float32, [2]))
+        bad_shape(s, tf.compat.v1.placeholder(tf.float32, [2, 2]))
+        bad_shape(s, tf.compat.v1.placeholder(tf.float32, [3, 1, 2]))
 
         # test dynamic shape
         s = _TensorSpec(shape=('?', 3))
-        good(s, tf.placeholder(tf.float32, [2, 3]))
-        good(s, tf.placeholder(tf.float32, [None, 3]))
-        bad_shape(s, tf.placeholder(tf.float32, None))
-        bad_shape(s, tf.placeholder(tf.float32, ()))
-        bad_shape(s, tf.placeholder(tf.float32, [2]))
-        bad_shape(s, tf.placeholder(tf.float32, [2, 1]))
-        bad_shape(s, tf.placeholder(tf.float32, [3, 2, 3]))
+        good(s, tf.compat.v1.placeholder(tf.float32, [2, 3]))
+        good(s, tf.compat.v1.placeholder(tf.float32, [None, 3]))
+        bad_shape(s, tf.compat.v1.placeholder(tf.float32, None))
+        bad_shape(s, tf.compat.v1.placeholder(tf.float32, ()))
+        bad_shape(s, tf.compat.v1.placeholder(tf.float32, [2]))
+        bad_shape(s, tf.compat.v1.placeholder(tf.float32, [2, 1]))
+        bad_shape(s, tf.compat.v1.placeholder(tf.float32, [3, 2, 3]))
 
         # test allow more dims
         s = _TensorSpec(shape=('...', '?', 3))
-        good(s, tf.placeholder(tf.float32, [2, 3]))
-        good(s, tf.placeholder(tf.float32, [None, 3]))
-        good(s, tf.placeholder(tf.float32, [3, 2, 3]))
-        good(s, tf.placeholder(tf.float32, [None, None, 3]))
-        bad_shape(s, tf.placeholder(tf.float32, None))
-        bad_shape(s, tf.placeholder(tf.float32, ()))
-        bad_shape(s, tf.placeholder(tf.float32, [2]))
-        bad_shape(s, tf.placeholder(tf.float32, [2, 1]))
-        bad_shape(s, tf.placeholder(tf.float32, [3, 2, 1]))
+        good(s, tf.compat.v1.placeholder(tf.float32, [2, 3]))
+        good(s, tf.compat.v1.placeholder(tf.float32, [None, 3]))
+        good(s, tf.compat.v1.placeholder(tf.float32, [3, 2, 3]))
+        good(s, tf.compat.v1.placeholder(tf.float32, [None, None, 3]))
+        bad_shape(s, tf.compat.v1.placeholder(tf.float32, None))
+        bad_shape(s, tf.compat.v1.placeholder(tf.float32, ()))
+        bad_shape(s, tf.compat.v1.placeholder(tf.float32, [2]))
+        bad_shape(s, tf.compat.v1.placeholder(tf.float32, [2, 1]))
+        bad_shape(s, tf.compat.v1.placeholder(tf.float32, [3, 2, 1]))
 
         # test unknown but fixed dimensions
         s = _TensorSpec(shape=('*', 3))
-        good(s, tf.placeholder(tf.float32, [2, 3]))
-        bad_shape(s, tf.placeholder(tf.float32, [None, 3]))
-        bad_shape(s, tf.placeholder(tf.float32, [3]))
+        good(s, tf.compat.v1.placeholder(tf.float32, [2, 3]))
+        bad_shape(s, tf.compat.v1.placeholder(tf.float32, [None, 3]))
+        bad_shape(s, tf.compat.v1.placeholder(tf.float32, [3]))
 
         # test known or dynamic dimensions
         s = _TensorSpec(shape=('2?', 3))
-        good(s, tf.placeholder(tf.float32, [2, 3]))
-        good(s, tf.placeholder(tf.float32, [None, 3]))
-        bad_shape(s, tf.placeholder(tf.float32, [4, 3]))
-        bad_shape(s, tf.placeholder(tf.float32, [3]))
+        good(s, tf.compat.v1.placeholder(tf.float32, [2, 3]))
+        good(s, tf.compat.v1.placeholder(tf.float32, [None, 3]))
+        bad_shape(s, tf.compat.v1.placeholder(tf.float32, [4, 3]))
+        bad_shape(s, tf.compat.v1.placeholder(tf.float32, [3]))
 
 
 class ParamSpecTestCase(unittest.TestCase):

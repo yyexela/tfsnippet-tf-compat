@@ -14,7 +14,7 @@ class SmartCondTestCase(tf.test.TestCase):
             self.assertEqual(2, smart_cond(False, (lambda: 1), (lambda: 2)))
 
             # test dynamic condition
-            cond_in = tf.placeholder(dtype=tf.bool, shape=())
+            cond_in = tf.compat.v1.placeholder(dtype=tf.bool, shape=())
             value = smart_cond(
                 cond_in, lambda: tf.constant(1), lambda: tf.constant(2))
             self.assertIsInstance(value, tf.Tensor)

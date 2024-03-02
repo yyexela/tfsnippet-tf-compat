@@ -53,9 +53,9 @@ class EvaluatorTestCase(tf.test.TestCase):
     def test_run(self):
         with self.test_session() as session:
             df = DataFlow.arrays([np.arange(6, dtype=np.float32)], batch_size=4)
-            ph = tf.placeholder(tf.float32, shape=[None])
-            ph2 = tf.placeholder(tf.float32, shape=[])
-            ph3 = tf.placeholder(tf.float32, shape=[])
+            ph = tf.compat.v1.placeholder(tf.float32, shape=[None])
+            ph2 = tf.compat.v1.placeholder(tf.float32, shape=[])
+            ph3 = tf.compat.v1.placeholder(tf.float32, shape=[])
 
             # test default loss weight and merged feed dict
             with TrainLoop([], max_epoch=1) as loop:

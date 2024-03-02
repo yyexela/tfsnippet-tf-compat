@@ -111,7 +111,7 @@ class ZhuSuanDistributionTestCase(tf.test.TestCase):
         self.assertFalse(t.is_reparameterized)
 
     def test_is_reparameterized(self):
-        x = tf.get_variable(shape=(), dtype=tf.float32, name='x',
+        x = tf.compat.v1.get_variable(shape=(), dtype=tf.float32, name='x',
                             initializer=tf.constant_initializer(2.))
 
         def test_is_reparemeterized(distrib_flag, sample_flag=None):
@@ -125,7 +125,7 @@ class ZhuSuanDistributionTestCase(tf.test.TestCase):
                 self.assertIsNone(grads[0])
 
         with self.test_session() as sess:
-            sess.run(tf.variables_initializer([x]))
+            sess.run(tf.compat.v1.variables_initializer([x]))
             test_is_reparemeterized(distrib_flag=True, sample_flag=None)
             test_is_reparemeterized(distrib_flag=True, sample_flag=True)
             test_is_reparemeterized(distrib_flag=True, sample_flag=False)

@@ -14,7 +14,7 @@ class AssertionTestCase(tf.test.TestCase):
         self.assertTrue(settings.enable_assertions)
 
     def test_assert_deps(self):
-        ph = tf.placeholder(dtype=tf.bool, shape=())
+        ph = tf.compat.v1.placeholder(dtype=tf.bool, shape=())
         op = tf.assert_equal(ph, True, message='abcdefg')
 
         # test ops are empty
@@ -48,7 +48,7 @@ class CheckNumericsTestCase(tf.test.TestCase):
         self.assertFalse(settings.check_numerics)
 
     def test_check_numerics(self):
-        ph = tf.placeholder(dtype=tf.float32, shape=())
+        ph = tf.compat.v1.placeholder(dtype=tf.float32, shape=())
         with scoped_set_config(settings, check_numerics=True):
             x = maybe_check_numerics(ph, message='numerical issues')
         with pytest.raises(Exception, match='numerical issues'):

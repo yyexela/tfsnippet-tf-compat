@@ -48,7 +48,7 @@ class SplitFlowTestCase(tf.test.TestCase):
                 self, flow, sess, x, rtol=1e-4, atol=1e-5)
 
             # dynamic input, split_axis = -2, value_ndims = 2, right = None
-            x_ph = tf.placeholder(dtype=tf.float64, shape=[None] * 4)
+            x_ph = tf.compat.v1.placeholder(dtype=tf.float64, shape=[None] * 4)
             flow = SplitFlow(-2, QuadraticFlow(2., 5., value_ndims=2))
             self.assertEqual(flow.x_value_ndims, 2)
             self.assertEqual(flow.y_value_ndims, 2)
@@ -65,7 +65,7 @@ class SplitFlowTestCase(tf.test.TestCase):
                 self, flow, sess, x_ph, feed_dict={x_ph: x})
 
             # dynamic input, split_axis = 2, value_ndims = 3
-            x_ph = tf.placeholder(dtype=tf.float64, shape=[None] * 4)
+            x_ph = tf.compat.v1.placeholder(dtype=tf.float64, shape=[None] * 4)
             flow = SplitFlow(split_axis=2,
                              left=QuadraticFlow(2., 5., value_ndims=3),
                              right=QuadraticFlow(1.5, 3., value_ndims=3))
@@ -120,7 +120,7 @@ class SplitFlowTestCase(tf.test.TestCase):
             x = 10. * np.random.normal(size=[3, 4, 5, 12]).astype(np.float64)
 
             # 2 -> 3, x_value_ndims = 3, y_value_ndims = 4
-            x_ph = tf.placeholder(dtype=tf.float64, shape=[None] * 4)
+            x_ph = tf.compat.v1.placeholder(dtype=tf.float64, shape=[None] * 4)
             flow = SplitFlow(
                 split_axis=-2,
                 join_axis=2,

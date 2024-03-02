@@ -17,10 +17,10 @@ class LoggingUtilsTestCase(tf.test.TestCase):
         def strip_summary(cnt):
             return '\n'.join(l.lstrip() for l in cnt.strip().split('\n'))
 
-        a = tf.get_variable('a', dtype=tf.int32, shape=[2])
+        a = tf.compat.v1.get_variable('a', dtype=tf.int32, shape=[2])
         with tf.variable_scope('nested'):
-            b = tf.get_variable('b', dtype=tf.float32, shape=(3, 4, 5))
-        c = tf.get_variable('c', dtype=tf.float32, shape=(30000,))
+            b = tf.compat.v1.get_variable('b', dtype=tf.float32, shape=(3, 4, 5))
+        c = tf.compat.v1.get_variable('c', dtype=tf.float32, shape=(30000,))
 
         self.assertEqual(summarize_variables([]), '')
         self.assertEqual(summarize_variables([a]), (

@@ -442,7 +442,7 @@ def broadcast_to_shape(x, shape, name=None):
 
                 for i in axis_to_check:
                     assertions.append(tf.assert_equal(
-                        tf.logical_or(
+                        tf.math.logical_or(
                             tf.equal(x_dynamic_shape[i], shape[i]),
                             tf.equal(x_dynamic_shape[i], 1),
                         ),

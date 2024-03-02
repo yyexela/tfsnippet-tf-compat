@@ -59,9 +59,9 @@ def main():
     results.make_dirs('train_summary', exist_ok=True)
 
     # input placeholders
-    input_x = tf.placeholder(
+    input_x = tf.compat.v1.placeholder(
         dtype=tf.float32, shape=(None, config.x_dim), name='input_x')
-    input_y = tf.placeholder(
+    input_y = tf.compat.v1.placeholder(
         dtype=tf.int32, shape=[None], name='input_y')
     learning_rate = spt.AnnealingVariable(
         'learning_rate', config.initial_lr, config.lr_anneal_factor)
@@ -78,7 +78,7 @@ def main():
     params = tf.trainable_variables()
     grads = optimizer.compute_gradients(loss, var_list=params)
     with tf.control_dependencies(
-            tf.get_collection(tf.GraphKeys.UPDATE_OPS)):
+            tf.compat.v1.get_collection(tf.compat.v1.GraphKeys.UPDATE_OPS)):
         train_op = optimizer.apply_gradients(grads)
 
     # prepare for training and testing data

@@ -14,7 +14,7 @@ class FeatureShufflingFlowTestCase(tf.test.TestCase):
         with self.test_session() as sess:
             # axis = -1, value_ndims = 1
             x = np.random.normal(size=[3, 4, 5, 6]).astype(np.float32)
-            x_ph = tf.placeholder(dtype=tf.float32, shape=[None, None, None, 6])
+            x_ph = tf.compat.v1.placeholder(dtype=tf.float32, shape=[None, None, None, 6])
             permutation = np.arange(6, dtype=np.int32)
             np.random.shuffle(permutation)
             y = x[..., permutation]
@@ -34,11 +34,11 @@ class FeatureShufflingFlowTestCase(tf.test.TestCase):
 
             assert_variables(['permutation'], trainable=False,
                              scope='feature_shuffling_flow',
-                             collections=[tf.GraphKeys.MODEL_VARIABLES])
+                             collections=[tf.compat.v1.GraphKeys.MODEL_VARIABLES])
 
             # axis = -2, value_ndims = 3
             x = np.random.normal(size=[3, 4, 5, 6]).astype(np.float32)
-            x_ph = tf.placeholder(dtype=tf.float32, shape=[None, None, 5, None])
+            x_ph = tf.compat.v1.placeholder(dtype=tf.float32, shape=[None, None, 5, None])
             permutation = np.arange(5, dtype=np.int32)
             np.random.shuffle(permutation)
             y = x[..., permutation, :]

@@ -62,7 +62,7 @@ def log_sum_exp(x, axis=None, keepdims=False, name=None):
             x_max = x_max_keepdims
         sum_exp = tf.reduce_sum(tf.exp(x - x_max_keepdims), axis=axis,
                                 keepdims=keepdims)
-        return x_max + tf.log(sum_exp)
+        return x_max + tf.math.log(sum_exp)
 
 
 @add_name_arg_doc
@@ -102,4 +102,4 @@ def log_mean_exp(x, axis=None, keepdims=False, name=None):
             x_max = x_max_keepdims
         mean_exp = tf.reduce_mean(tf.exp(x - x_max_keepdims), axis=axis,
                                   keepdims=keepdims)
-        return x_max + tf.log(mean_exp)
+        return x_max + tf.math.log(mean_exp)

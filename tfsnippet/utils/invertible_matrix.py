@@ -304,7 +304,7 @@ class InvertibleMatrix(VarScopeObject):
                         m = self._matrix
                         if dtype != tf.float64:
                             m = tf.cast(m, dtype=tf.float64)
-                        self._log_det = tf.log(
+                        self._log_det = tf.math.log(
                             tf.maximum(tf.abs(tf.matrix_determinant(m)),
                                        epsilon)
                         )

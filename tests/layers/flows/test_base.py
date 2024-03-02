@@ -240,9 +240,9 @@ class FeatureMappingFlowTestCase(tf.test.TestCase):
         with pytest.raises(ValueError, match='The feature axis of `input` '
                                              'is not deterministic'):
             layer = FeatureMappingFlow(axis=(-1, -2), value_ndims=2)
-            _ = layer.apply(tf.placeholder(dtype=tf.float32, shape=[None, 3]))
+            _ = layer.apply(tf.compat.v1.placeholder(dtype=tf.float32, shape=[None, 3]))
 
         with pytest.raises(ValueError, match='The feature axis of `input` '
                                              'is not deterministic'):
             layer = FeatureMappingFlow(axis=-2, value_ndims=2)
-            _ = layer.apply(tf.placeholder(dtype=tf.float32, shape=[None, 3]))
+            _ = layer.apply(tf.compat.v1.placeholder(dtype=tf.float32, shape=[None, 3]))

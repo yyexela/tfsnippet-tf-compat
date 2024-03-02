@@ -83,7 +83,7 @@ class SpaceToDepthTestCase(tf.test.TestCase):
 
             # dynamic shape, bs = 2, channels_last = True
             x = np.random.normal(size=[4, 5, 8, 12, 7]).astype(np.float32)
-            x_ph = tf.placeholder(shape=[None, None, None, None, 7],
+            x_ph = tf.compat.v1.placeholder(shape=[None, None, None, None, 7],
                                   dtype=tf.float32)
             np.testing.assert_allclose(
                 sess.run(space_to_depth(x_ph, 2, True), feed_dict={x_ph: x}),
@@ -92,7 +92,7 @@ class SpaceToDepthTestCase(tf.test.TestCase):
 
             # dynamic shape, bs = 3, channels_last = False
             x = np.random.normal(size=[5, 7, 6, 9]).astype(np.float32)
-            x_ph = tf.placeholder(shape=[None, 7, None, None],
+            x_ph = tf.compat.v1.placeholder(shape=[None, 7, None, None],
                                   dtype=tf.float32)
             np.testing.assert_allclose(
                 sess.run(space_to_depth(x_ph, 3, False), feed_dict={x_ph: x}),
@@ -121,7 +121,7 @@ class DepthToSpaceTestCase(tf.test.TestCase):
 
             # dynamic shape, bs = 2, channels_last = True
             x = np.random.normal(size=[4, 5, 4, 6, 28]).astype(np.float32)
-            x_ph = tf.placeholder(shape=[None, None, None, None, 28],
+            x_ph = tf.compat.v1.placeholder(shape=[None, None, None, None, 28],
                                   dtype=tf.float32)
             np.testing.assert_allclose(
                 sess.run(depth_to_space(x_ph, 2, True), feed_dict={x_ph: x}),
@@ -130,7 +130,7 @@ class DepthToSpaceTestCase(tf.test.TestCase):
 
             # dynamic shape, bs = 3, channels_last = False
             x = np.random.normal(size=[5, 63, 2, 3]).astype(np.float32)
-            x_ph = tf.placeholder(shape=[None, 63, None, None],
+            x_ph = tf.compat.v1.placeholder(shape=[None, 63, None, None],
                                   dtype=tf.float32)
             np.testing.assert_allclose(
                 sess.run(depth_to_space(x_ph, 3, False), feed_dict={x_ph: x}),

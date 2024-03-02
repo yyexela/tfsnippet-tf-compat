@@ -28,16 +28,16 @@ def model_variable(name,
         trainable (bool): Whether or not the variable is trainable?
         collections: In addition to `GLOBAL_VARIABLES` and `MODEL_VARIABLES`,
             also add the variable to these collections.
-        \\**kwargs: Other named arguments passed to :func:`tf.get_variable`.
+        \\**kwargs: Other named arguments passed to :func:`tf.compat.v1.get_variable`.
 
     Returns:
         tf.Variable: The variable.
     """
     collections = list(set(
         list(collections or ()) +
-        [tf.GraphKeys.GLOBAL_VARIABLES, tf.GraphKeys.MODEL_VARIABLES]
+        [tf.compat.v1.GraphKeys.GLOBAL_VARIABLES, tf.compat.v1.GraphKeys.MODEL_VARIABLES]
     ))
-    return tf.get_variable(
+    return tf.compat.v1.get_variable(
         name=name,
         shape=shape,
         dtype=dtype,
@@ -60,4 +60,4 @@ def get_model_variables(scope=None):
     Returns:
         list[tf.Variable]: The model variables.
     """
-    return tf.get_collection(tf.GraphKeys.MODEL_VARIABLES, scope=scope)
+    return tf.compat.v1.get_collection(tf.compat.v1.GraphKeys.MODEL_VARIABLES, scope=scope)

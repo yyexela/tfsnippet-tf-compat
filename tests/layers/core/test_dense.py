@@ -45,7 +45,7 @@ class DenseTestCase(tf.test.TestCase):
             )
 
             # test dynamic batch and sampling size
-            ph = tf.placeholder(dtype=tf.float64, shape=(None, None, 5))
+            ph = tf.compat.v1.placeholder(dtype=tf.float64, shape=(None, None, 5))
             np.testing.assert_allclose(
                 sess.run(
                     dense(
@@ -79,10 +79,10 @@ class DenseTestCase(tf.test.TestCase):
         with tf.Graph().as_default():
             _ = dense(tf.constant(x, dtype=tf.float64), 3)
             assert_variables(['kernel', 'bias'], trainable=True, scope='dense',
-                             collections=[tf.GraphKeys.MODEL_VARIABLES])
+                             collections=[tf.compat.v1.GraphKeys.MODEL_VARIABLES])
 
-            kernel_var = tf.get_collection(tf.GraphKeys.GLOBAL_VARIABLES)[-2]
-            bias_var = tf.get_collection(tf.GraphKeys.GLOBAL_VARIABLES)[-1]
+            kernel_var = tf.compat.v1.get_collection(tf.compat.v1.GraphKeys.GLOBAL_VARIABLES)[-2]
+            bias_var = tf.compat.v1.get_collection(tf.compat.v1.GraphKeys.GLOBAL_VARIABLES)[-1]
             self.assertEqual(get_static_shape(kernel_var), kernel.shape)
             self.assertEqual(get_static_shape(bias_var), bias.shape)
 
@@ -90,13 +90,13 @@ class DenseTestCase(tf.test.TestCase):
         with tf.Graph().as_default():
             _ = dense(tf.constant(x, dtype=tf.float64), 3, trainable=False)
             assert_variables(['kernel', 'bias'], trainable=False, scope='dense',
-                             collections=[tf.GraphKeys.MODEL_VARIABLES])
+                             collections=[tf.compat.v1.GraphKeys.MODEL_VARIABLES])
 
         # test create variables, use_bias is False
         with tf.Graph().as_default():
             _ = dense(tf.constant(x, dtype=tf.float64), 3, use_bias=False)
             assert_variables(['kernel'], trainable=True, scope='dense',
-                             collections=[tf.GraphKeys.MODEL_VARIABLES])
+                             collections=[tf.compat.v1.GraphKeys.MODEL_VARIABLES])
             assert_variables(['bias'], exist=False, scope='dense')
 
     def test_normalization_and_activation(self):

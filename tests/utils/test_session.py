@@ -50,25 +50,25 @@ class GetDefaultSessionOrErrorTestCase(tf.test.TestCase):
 class GetVariablesTestCase(tf.test.TestCase):
 
     def test_get_variables_as_dict(self):
-        GLOBAL_VARIABLES = tf.GraphKeys.GLOBAL_VARIABLES
-        MODEL_VARIABLES = tf.GraphKeys.MODEL_VARIABLES
-        LOCAL_VARIABLES = tf.GraphKeys.LOCAL_VARIABLES
+        GLOBAL_VARIABLES = tf.compat.v1.GraphKeys.GLOBAL_VARIABLES
+        MODEL_VARIABLES = tf.compat.v1.GraphKeys.MODEL_VARIABLES
+        LOCAL_VARIABLES = tf.compat.v1.GraphKeys.LOCAL_VARIABLES
 
         # create the variables to be checked
-        a = tf.get_variable(
+        a = tf.compat.v1.get_variable(
             'a', shape=(), collections=[GLOBAL_VARIABLES, MODEL_VARIABLES])
-        b = tf.get_variable(
+        b = tf.compat.v1.get_variable(
             'b', shape=(), collections=[GLOBAL_VARIABLES])
-        c = tf.get_variable(
+        c = tf.compat.v1.get_variable(
             'c', shape=(), collections=[MODEL_VARIABLES])
 
         with tf.variable_scope('child') as child:
-            child_a = tf.get_variable(
+            child_a = tf.compat.v1.get_variable(
                 'a', shape=(),
                 collections=[GLOBAL_VARIABLES, MODEL_VARIABLES])
-            child_b = tf.get_variable(
+            child_b = tf.compat.v1.get_variable(
                 'b', shape=(), collections=[GLOBAL_VARIABLES])
-            child_c = tf.get_variable(
+            child_c = tf.compat.v1.get_variable(
                 'c', shape=(), collections=[MODEL_VARIABLES])
 
         # test to get variables as dict
@@ -118,12 +118,12 @@ class GetUninitializedVariablesTestCase(tf.test.TestCase):
 
     def test_get_uninitialized_variables(self):
         with self.test_session() as sess:
-            a = tf.get_variable('a', dtype=tf.int32, initializer=1)
-            b = tf.get_variable('b', dtype=tf.int32, initializer=2)
-            c = tf.get_variable('c', dtype=tf.int32, initializer=3,
-                                collections=[tf.GraphKeys.MODEL_VARIABLES])
-            d = tf.get_variable('d', dtype=tf.int32, initializer=4,
-                                collections=[tf.GraphKeys.MODEL_VARIABLES])
+            a = tf.compat.v1.get_variable('a', dtype=tf.int32, initializer=1)
+            b = tf.compat.v1.get_variable('b', dtype=tf.int32, initializer=2)
+            c = tf.compat.v1.get_variable('c', dtype=tf.int32, initializer=3,
+                                collections=[tf.compat.v1.GraphKeys.MODEL_VARIABLES])
+            d = tf.compat.v1.get_variable('d', dtype=tf.int32, initializer=4,
+                                collections=[tf.compat.v1.GraphKeys.MODEL_VARIABLES])
             self.assertEqual(
                 get_uninitialized_variables(),
                 [a, b]
@@ -132,7 +132,7 @@ class GetUninitializedVariablesTestCase(tf.test.TestCase):
                 get_uninitialized_variables([a, b, c, d]),
                 [a, b, c, d]
             )
-            sess.run(tf.variables_initializer([a, c]))
+            sess.run(tf.compat.v1.variables_initializer([a, c]))
             self.assertEqual(
                 get_uninitialized_variables(),
                 [b]
@@ -141,7 +141,7 @@ class GetUninitializedVariablesTestCase(tf.test.TestCase):
                 get_uninitialized_variables([a, b, c, d]),
                 [b, d]
             )
-            sess.run(tf.variables_initializer([b, d]))
+            sess.run(tf.compat.v1.variables_initializer([b, d]))
             self.assertEqual(
                 get_uninitialized_variables(),
                 []
@@ -155,12 +155,12 @@ class GetUninitializedVariablesTestCase(tf.test.TestCase):
 class EnsureVariablesInitializedTestCase(tf.test.TestCase):
 
     def test_ensure_variables_initialized(self):
-        a = tf.get_variable('a', dtype=tf.int32, initializer=1)
-        b = tf.get_variable('b', dtype=tf.int32, initializer=2)
-        c = tf.get_variable('c', dtype=tf.int32, initializer=3,
-                            collections=[tf.GraphKeys.MODEL_VARIABLES])
-        d = tf.get_variable('d', dtype=tf.int32, initializer=4,
-                            collections=[tf.GraphKeys.MODEL_VARIABLES])
+        a = tf.compat.v1.get_variable('a', dtype=tf.int32, initializer=1)
+        b = tf.compat.v1.get_variable('b', dtype=tf.int32, initializer=2)
+        c = tf.compat.v1.get_variable('c', dtype=tf.int32, initializer=3,
+                            collections=[tf.compat.v1.GraphKeys.MODEL_VARIABLES])
+        d = tf.compat.v1.get_variable('d', dtype=tf.int32, initializer=4,
+                            collections=[tf.compat.v1.GraphKeys.MODEL_VARIABLES])
 
         # test using list
         with self.test_session():
@@ -180,8 +180,8 @@ class EnsureVariablesInitializedTestCase(tf.test.TestCase):
             )
 
     def test_ensure_variables_initialized_using_dict(self):
-        a = tf.get_variable('a', dtype=tf.int32, initializer=1)
-        b = tf.get_variable('b', dtype=tf.int32, initializer=2)
+        a = tf.compat.v1.get_variable('a', dtype=tf.int32, initializer=1)
+        b = tf.compat.v1.get_variable('b', dtype=tf.int32, initializer=2)
 
         # test using dict
         with self.test_session():
@@ -202,15 +202,15 @@ class GetVariableDDITestCase(tf.test.TestCase):
                 collections=collections
             )
             # ensure `get_variable_ddi` will add the variable to collections
-            for coll in (collections or [tf.GraphKeys.GLOBAL_VARIABLES]):
+            for coll in (collections or [tf.compat.v1.GraphKeys.GLOBAL_VARIABLES]):
                 self.assertEqual(
-                    tf.get_collection(coll)[-1].name.rsplit('/', 1)[-1],
+                    tf.compat.v1.get_collection(coll)[-1].name.rsplit('/', 1)[-1],
                     name + ':0'
                 )
             return v
 
         _ = g('var', 0., initializing=True,
-              collections=[tf.GraphKeys.MODEL_VARIABLES])
+              collections=[tf.compat.v1.GraphKeys.MODEL_VARIABLES])
 
         # test reuse
         @global_reuse
@@ -218,7 +218,7 @@ class GetVariableDDITestCase(tf.test.TestCase):
             return g('x', initial_value, initializing=initializing)
 
         with self.test_session() as sess:
-            x_in = tf.placeholder(dtype=tf.float32, shape=())
+            x_in = tf.compat.v1.placeholder(dtype=tf.float32, shape=())
             x = f(x_in, initializing=True)
             self.assertEqual(sess.run(x, feed_dict={x_in: 123.}), 123.)
             x = f(x_in, initializing=False)

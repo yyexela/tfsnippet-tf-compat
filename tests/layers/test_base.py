@@ -13,7 +13,7 @@ class MyLayer(BaseLayer):
         self._apply = Mock(return_value=output)
 
     def _build(self, input=None):
-        assert(tf.get_variable_scope().name == self.variable_scope.name)
+        assert(tf.compat.v1.get_variable_scope().name == self.variable_scope.name)
 
 
 class BaseLayerTestCase(tf.test.TestCase):

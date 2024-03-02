@@ -17,7 +17,7 @@ class AssertOpsTestCase(tf.test.TestCase):
                 _ = assert_scalar_equal(1, 2, message='abcdefg')
 
             # prepare dynamic comparison
-            x_in = tf.placeholder(dtype=tf.int32, shape=())
+            x_in = tf.compat.v1.placeholder(dtype=tf.int32, shape=())
             assert_1 = assert_scalar_equal(1, x_in, message='abcdefg')
             assert_2 = assert_scalar_equal(x_in, 2, message='abcdefg')
 
@@ -47,7 +47,7 @@ class AssertOpsTestCase(tf.test.TestCase):
                 _ = assert_rank(x, 2, message='abcdefg')
 
             # prepare dynamic comparison
-            x_in = tf.placeholder(dtype=tf.int32, shape=None)
+            x_in = tf.compat.v1.placeholder(dtype=tf.int32, shape=None)
             assert_1 = assert_rank(x_in, 3, message='abcdefg')
             assert_2 = assert_rank(x_in, 2, message='abcdefg')
 
@@ -71,7 +71,7 @@ class AssertOpsTestCase(tf.test.TestCase):
                 _ = assert_rank_at_least(x, 4, message='abcdefg')
 
             # prepare dynamic comparison
-            x_in = tf.placeholder(dtype=tf.int32, shape=None)
+            x_in = tf.compat.v1.placeholder(dtype=tf.int32, shape=None)
             assert_1 = assert_rank_at_least(x_in, 2, message='abcdefg')
             assert_2 = assert_rank_at_least(x_in, 4, message='abcdefg')
 
@@ -96,8 +96,8 @@ class AssertOpsTestCase(tf.test.TestCase):
                 _ = assert_shape_equal(x1, x2, message='abcdefg')
 
             # prepare dynamic comparison
-            x1_in = tf.placeholder(dtype=tf.int32, shape=None)
-            x2_in = tf.placeholder(dtype=tf.int32, shape=None)
+            x1_in = tf.compat.v1.placeholder(dtype=tf.int32, shape=None)
+            x2_in = tf.compat.v1.placeholder(dtype=tf.int32, shape=None)
             assert_op = assert_shape_equal(x1_in, x2_in, message='abcdefg')
 
             with tf.control_dependencies([assert_op]):

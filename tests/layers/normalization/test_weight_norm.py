@@ -63,7 +63,7 @@ class WeightNormTestCase(tf.test.TestCase):
 
             # test one dimension, with generated scale
             weight = weight_norm(tf.constant(kernel), axis=-1)
-            scale_var = tf.get_collection(tf.GraphKeys.GLOBAL_VARIABLES)[0]
+            scale_var = tf.compat.v1.get_collection(tf.compat.v1.GraphKeys.GLOBAL_VARIABLES)[0]
             self.assertEqual(get_static_shape(scale_var), kernel.shape)
             sess.run(scale_var.assign(scale + 1.))
 
@@ -76,7 +76,7 @@ class WeightNormTestCase(tf.test.TestCase):
 
             # test two dimensions, with generated scale
             weight = weight_norm(tf.constant(kernel), axis=(0, -1))
-            scale_var = tf.get_collection(tf.GraphKeys.GLOBAL_VARIABLES)[1]
+            scale_var = tf.compat.v1.get_collection(tf.compat.v1.GraphKeys.GLOBAL_VARIABLES)[1]
             self.assertEqual(get_static_shape(scale_var), kernel.shape)
             sess.run(scale_var.assign(scale + 2.))
 
@@ -92,13 +92,13 @@ class WeightNormTestCase(tf.test.TestCase):
         with tf.Graph().as_default():
             _ = weight_norm(tf.zeros([2, 3]), -1)
             assert_variables(['scale'], trainable=True, scope='weight_norm',
-                             collections=[tf.GraphKeys.MODEL_VARIABLES])
+                             collections=[tf.compat.v1.GraphKeys.MODEL_VARIABLES])
 
         # test non-trainable
         with tf.Graph().as_default():
             _ = weight_norm(tf.zeros([2, 3]), -1, trainable=False)
             assert_variables(['scale'], trainable=False, scope='weight_norm',
-                             collections=[tf.GraphKeys.MODEL_VARIABLES])
+                             collections=[tf.compat.v1.GraphKeys.MODEL_VARIABLES])
 
         # test no scale
         with tf.Graph().as_default():

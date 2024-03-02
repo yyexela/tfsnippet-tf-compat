@@ -63,12 +63,12 @@ class ActNormClassTestCase(tf.test.TestCase):
         np.random.seed(1234)
 
         x = np.random.normal(size=[3, 4, 5, 6, 7])
-        x_ph = tf.placeholder(dtype=tf.float64, shape=[None, None, 5, None, 7])
+        x_ph = tf.compat.v1.placeholder(dtype=tf.float64, shape=[None, None, 5, None, 7])
         x2 = np.random.normal(size=[2, 3, 4, 5, 6, 7])
-        x2_ph = tf.placeholder(dtype=tf.float64,
+        x2_ph = tf.compat.v1.placeholder(dtype=tf.float64,
                                shape=[None, None, None, 5, None, 7])
         x3 = np.random.normal(size=[4, 5, 6, 7])
-        x3_ph = tf.placeholder(dtype=tf.float64, shape=[None, 5, None, 7])
+        x3_ph = tf.compat.v1.placeholder(dtype=tf.float64, shape=[None, 5, None, 7])
 
         with self.test_session() as sess:
             # -- static input shape, scale_type = 'linear', value_ndims = 3
@@ -182,7 +182,7 @@ class ActNormClassTestCase(tf.test.TestCase):
             _ = act_norm(tf.zeros([2, 3]), trainable=True, scale_type='linear')
             assert_variables(['scale', 'bias'], trainable=True,
                              scope='act_norm',
-                             collections=[tf.GraphKeys.MODEL_VARIABLES])
+                             collections=[tf.compat.v1.GraphKeys.MODEL_VARIABLES])
             assert_variables(['log_scale'], exist=False,  scope='act_norm')
 
         # test non-trainable
@@ -190,5 +190,5 @@ class ActNormClassTestCase(tf.test.TestCase):
             _ = act_norm(tf.zeros([2, 3]), trainable=False, scale_type='exp')
             assert_variables(['log_scale', 'bias'], trainable=False,
                              scope='act_norm',
-                             collections=[tf.GraphKeys.MODEL_VARIABLES])
+                             collections=[tf.compat.v1.GraphKeys.MODEL_VARIABLES])
             assert_variables(['scale'], exist=False,  scope='act_norm')

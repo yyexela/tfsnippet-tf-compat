@@ -215,25 +215,25 @@ class TensorWrapper(object):
 
     # logical operations
     def __invert__(self):
-        return tf.logical_not(self)
+        return tf.math.logical_not(self)
 
     def __and__(self, other):
-        return tf.logical_and(self, other)
+        return tf.math.logical_and(self, other)
 
     def __rand__(self, other):
-        return tf.logical_and(other, self)
+        return tf.math.logical_and(other, self)
 
     def __or__(self, other):
-        return tf.logical_or(self, other)
+        return tf.math.logical_or(self, other)
 
     def __ror__(self, other):
-        return tf.logical_or(other, self)
+        return tf.math.logical_or(other, self)
 
     def __xor__(self, other):
-        return tf.logical_xor(self, other)
+        return tf.math.logical_xor(self, other)
 
     def __rxor__(self, other):
-        return tf.logical_xor(other, self)
+        return tf.math.logical_xor(other, self)
 
     # boolean operations
     def __lt__(self, other):

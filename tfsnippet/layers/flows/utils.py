@@ -298,10 +298,10 @@ class LinearScale(Scale):
         return 1. / self._pre_scale
 
     def _log_scale(self):
-        return tf.log(tf.maximum(tf.abs(self._pre_scale), self._epsilon))
+        return tf.math.log(tf.maximum(tf.abs(self._pre_scale), self._epsilon))
 
     def _neg_log_scale(self):
-        return -tf.log(tf.maximum(tf.abs(self._pre_scale), self._epsilon))
+        return -tf.math.log(tf.maximum(tf.abs(self._pre_scale), self._epsilon))
 
     def _div(self, x):
         # TODO: use epsilon to prevent dividing by zero

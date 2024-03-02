@@ -58,9 +58,9 @@ class BayesianNet(object):
 
         def bayesian_linear_regression(x, alpha, beta, observed=None):
             net = BayesianNet(observed)
-            w = net.add('w', Normal(mean=0., logstd=tf.log(alpha)))
+            w = net.add('w', Normal(mean=0., logstd=tf.math.log(alpha)))
             y_mean = tf.reduce_sum(tf.expand_dims(w, 0) * x, 1)
-            y = net.add('y', Normal(mean=y_mean, logstd=tf.log(beta)))
+            y = net.add('y', Normal(mean=y_mean, logstd=tf.math.log(beta)))
             return net
 
     To observe any stochastic nodes in the network, pass a dictionary mapping

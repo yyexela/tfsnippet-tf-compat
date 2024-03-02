@@ -19,12 +19,12 @@ class IsLogDetShapeMatchesInputTestCase(tf.test.TestCase):
         g = lambda size: np.random.random(size=size)
         input = g([2, 1, 3])
 
-        input_3 = tf.placeholder(shape=[None, None, None], dtype=tf.float32)
-        input_ph = tf.placeholder(shape=None, dtype=tf.float32)
-        log_det_3 = tf.placeholder(shape=[None, None, None], dtype=tf.float32)
-        log_det_2 = tf.placeholder(shape=[None, None], dtype=tf.float32)
-        log_det_1 = tf.placeholder(shape=[None], dtype=tf.float32)
-        log_det_ph = tf.placeholder(shape=None, dtype=tf.float32)
+        input_3 = tf.compat.v1.placeholder(shape=[None, None, None], dtype=tf.float32)
+        input_ph = tf.compat.v1.placeholder(shape=None, dtype=tf.float32)
+        log_det_3 = tf.compat.v1.placeholder(shape=[None, None, None], dtype=tf.float32)
+        log_det_2 = tf.compat.v1.placeholder(shape=[None, None], dtype=tf.float32)
+        log_det_1 = tf.compat.v1.placeholder(shape=[None], dtype=tf.float32)
+        log_det_ph = tf.compat.v1.placeholder(shape=None, dtype=tf.float32)
 
         # static result, good cases
         self.assertTrue(is_log_det_shape_matches_input(g([2, 1, 3]), input, 0))
@@ -102,8 +102,8 @@ class IsLogDetShapeMatchesInputTestCase(tf.test.TestCase):
     def test_assert_log_det_shape_matches_input(self):
         g = lambda size: np.random.random(size=size)
         input = g([2, 1, 3])
-        input_ph = tf.placeholder(shape=None, dtype=tf.float32)
-        log_det_ph = tf.placeholder(shape=None, dtype=tf.float32)
+        input_ph = tf.compat.v1.placeholder(shape=None, dtype=tf.float32)
+        log_det_ph = tf.compat.v1.placeholder(shape=None, dtype=tf.float32)
 
         # static assertion
         self.assertIsNone(
@@ -148,8 +148,8 @@ class BroadcastLogDetAgainstInputTestCase(tf.test.TestCase):
         g = lambda size: np.random.random(size=size)
         log_det = g([2, 1, 3])
         input = g([4, 2, 5, 3])
-        input_ph = tf.placeholder(shape=None, dtype=tf.float32)
-        log_det_ph = tf.placeholder(shape=None, dtype=tf.float32)
+        input_ph = tf.compat.v1.placeholder(shape=None, dtype=tf.float32)
+        log_det_ph = tf.compat.v1.placeholder(shape=None, dtype=tf.float32)
 
         with self.test_session() as sess:
             # test static shape, value_ndims = 0
@@ -256,7 +256,7 @@ class ZeroLogDetTestCase(tf.test.TestCase):
             self.assertIs(t.tensor, t.tensor)
 
             # test dynamic shape
-            shape_ph = tf.placeholder(dtype=tf.int32, shape=None)
+            shape_ph = tf.compat.v1.placeholder(dtype=tf.int32, shape=None)
             t = ZeroLogDet(shape_ph, tf.float64)
             x = tf.random_normal(shape=shape[-2:], dtype=tf.float64)
             z = tf.zeros(shape, dtype=tf.float64)

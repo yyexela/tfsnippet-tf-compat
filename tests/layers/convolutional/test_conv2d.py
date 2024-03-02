@@ -145,7 +145,7 @@ class Conv2dTestCase(tf.test.TestCase):
             )
 
             # test dynamic shape, same padding, NHWC
-            ph = tf.placeholder(dtype=tf.float32,
+            ph = tf.compat.v1.placeholder(dtype=tf.float32,
                                 shape=(None, None, None, None, 5))
             np.testing.assert_allclose(
                 self.run_conv2d(x, 7, (3, 4), 'same', kernel, bias, 1, 1,
@@ -154,7 +154,7 @@ class Conv2dTestCase(tf.test.TestCase):
             )
 
             # test dynamic shape, valid padding NCHW
-            ph = tf.placeholder(dtype=tf.float32,
+            ph = tf.compat.v1.placeholder(dtype=tf.float32,
                                 shape=(None, None, 5, None, None))
             np.testing.assert_allclose(
                 self.run_conv2d(x, 7, (3, 4), 'valid', kernel, bias, 1, 1,
@@ -187,10 +187,10 @@ class Conv2dTestCase(tf.test.TestCase):
             # test NHWC
             _ = conv2d(x, 7, (3, 4), padding='same', channels_last=True)
             assert_variables(['kernel', 'bias'], trainable=True, scope='conv2d',
-                             collections=[tf.GraphKeys.MODEL_VARIABLES])
+                             collections=[tf.compat.v1.GraphKeys.MODEL_VARIABLES])
 
-            kernel_var = tf.get_collection(tf.GraphKeys.GLOBAL_VARIABLES)[-2]
-            bias_var = tf.get_collection(tf.GraphKeys.GLOBAL_VARIABLES)[-1]
+            kernel_var = tf.compat.v1.get_collection(tf.compat.v1.GraphKeys.GLOBAL_VARIABLES)[-2]
+            bias_var = tf.compat.v1.get_collection(tf.compat.v1.GraphKeys.GLOBAL_VARIABLES)[-1]
             self.assertEqual(kernel_var.shape, kernel.shape)
             self.assertEqual(bias_var.shape, bias.shape)
 
@@ -199,10 +199,10 @@ class Conv2dTestCase(tf.test.TestCase):
                        padding='valid', channels_last=False)
             assert_variables(['kernel', 'bias'], trainable=True,
                              scope='conv2d_1',
-                             collections=[tf.GraphKeys.MODEL_VARIABLES])
+                             collections=[tf.compat.v1.GraphKeys.MODEL_VARIABLES])
 
-            kernel_var = tf.get_collection(tf.GraphKeys.GLOBAL_VARIABLES)[-2]
-            bias_var = tf.get_collection(tf.GraphKeys.GLOBAL_VARIABLES)[-1]
+            kernel_var = tf.compat.v1.get_collection(tf.compat.v1.GraphKeys.GLOBAL_VARIABLES)[-2]
+            bias_var = tf.compat.v1.get_collection(tf.compat.v1.GraphKeys.GLOBAL_VARIABLES)[-1]
             self.assertEqual(kernel_var.shape, kernel.shape)
             self.assertEqual(bias_var.shape, bias.shape)
 
@@ -213,14 +213,14 @@ class Conv2dTestCase(tf.test.TestCase):
                        trainable=False)
             assert_variables(['kernel', 'bias'], trainable=False,
                              scope='conv2d',
-                             collections=[tf.GraphKeys.MODEL_VARIABLES])
+                             collections=[tf.compat.v1.GraphKeys.MODEL_VARIABLES])
 
         # test create variables with use_bias = False
         with tf.Graph().as_default():
             _ = conv2d(x, 7, (3, 4), padding='same', channels_last=True,
                        use_bias=False)
             assert_variables(['kernel'], trainable=True, scope='conv2d',
-                             collections=[tf.GraphKeys.MODEL_VARIABLES])
+                             collections=[tf.compat.v1.GraphKeys.MODEL_VARIABLES])
             assert_variables(['bias'], exist=False, scope='conv2d')
 
     def test_normalization_and_activation(self):
@@ -326,7 +326,7 @@ class Deconv2dTestCase(tf.test.TestCase):
         assert_allclose(deconv_out, linear_out)
 
         # test dynamic input, explicit dynamic output_shape, NHWC
-        ph = tf.placeholder(
+        ph = tf.compat.v1.placeholder(
             dtype=tf.float32,
             shape=(None,) * (len(y.shape) - 3) + (None, None, y_channels)
         )
@@ -337,7 +337,7 @@ class Deconv2dTestCase(tf.test.TestCase):
         assert_allclose(deconv_out, linear_out)
 
         # test dynamic input, explicit dynamic output_shape, NCHW
-        ph = tf.placeholder(
+        ph = tf.compat.v1.placeholder(
             dtype=tf.float32,
             shape=(None,) * (len(y.shape) - 3) + (y_channels, None, None)
         )
@@ -368,7 +368,7 @@ class Deconv2dTestCase(tf.test.TestCase):
             assert_allclose(deconv_out, linear_out)
 
             # test dynamic input, implicit output_shape, NHWC
-            ph = tf.placeholder(
+            ph = tf.compat.v1.placeholder(
                 dtype=tf.float32,
                 shape=(None,) * (len(y.shape) - 3) + (None, None, y_channels)
             )
@@ -380,7 +380,7 @@ class Deconv2dTestCase(tf.test.TestCase):
             assert_allclose(deconv_out, linear_out)
 
             # test dynamic input, implicit output_shape, NCHW
-            ph = tf.placeholder(
+            ph = tf.compat.v1.placeholder(
                 dtype=tf.float32,
                 shape=(None,) * (len(y.shape) - 3) + (y_channels, None, None)
             )
@@ -492,10 +492,10 @@ class Deconv2dTestCase(tf.test.TestCase):
             _ = deconv2d(x, 5, (3, 4), padding='same', channels_last=True)
             assert_variables(['kernel', 'bias'], trainable=True,
                              scope='deconv2d',
-                             collections=[tf.GraphKeys.MODEL_VARIABLES])
+                             collections=[tf.compat.v1.GraphKeys.MODEL_VARIABLES])
 
-            kernel_var = tf.get_collection(tf.GraphKeys.GLOBAL_VARIABLES)[-2]
-            bias_var = tf.get_collection(tf.GraphKeys.GLOBAL_VARIABLES)[-1]
+            kernel_var = tf.compat.v1.get_collection(tf.compat.v1.GraphKeys.GLOBAL_VARIABLES)[-2]
+            bias_var = tf.compat.v1.get_collection(tf.compat.v1.GraphKeys.GLOBAL_VARIABLES)[-1]
             self.assertEqual(kernel_var.shape, kernel.shape)
             self.assertEqual(bias_var.shape, bias.shape)
 
@@ -504,10 +504,10 @@ class Deconv2dTestCase(tf.test.TestCase):
                          padding='valid', channels_last=False)
             assert_variables(['kernel', 'bias'], trainable=True,
                              scope='deconv2d_1',
-                             collections=[tf.GraphKeys.MODEL_VARIABLES])
+                             collections=[tf.compat.v1.GraphKeys.MODEL_VARIABLES])
 
-            kernel_var = tf.get_collection(tf.GraphKeys.GLOBAL_VARIABLES)[-2]
-            bias_var = tf.get_collection(tf.GraphKeys.GLOBAL_VARIABLES)[-1]
+            kernel_var = tf.compat.v1.get_collection(tf.compat.v1.GraphKeys.GLOBAL_VARIABLES)[-2]
+            bias_var = tf.compat.v1.get_collection(tf.compat.v1.GraphKeys.GLOBAL_VARIABLES)[-1]
             self.assertEqual(kernel_var.shape, kernel.shape)
             self.assertEqual(bias_var.shape, bias.shape)
 
@@ -518,12 +518,12 @@ class Deconv2dTestCase(tf.test.TestCase):
                          trainable=False)
             assert_variables(['kernel', 'bias'], trainable=False,
                              scope='deconv2d',
-                             collections=[tf.GraphKeys.MODEL_VARIABLES])
+                             collections=[tf.compat.v1.GraphKeys.MODEL_VARIABLES])
 
         # test create variables with use_bias = False
         with tf.Graph().as_default():
             _ = deconv2d(x, 5, (3, 4), padding='same', channels_last=True,
                          use_bias=False)
             assert_variables(['kernel'], trainable=True, scope='deconv2d',
-                             collections=[tf.GraphKeys.MODEL_VARIABLES])
+                             collections=[tf.compat.v1.GraphKeys.MODEL_VARIABLES])
             assert_variables(['bias'], exist=False, scope='deconv2d')

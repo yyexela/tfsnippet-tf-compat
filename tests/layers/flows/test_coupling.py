@@ -113,7 +113,7 @@ class CouplingLayerTestCase(tf.test.TestCase):
         with self.test_session() as sess:
             # test linear scale, primary
             x = np.random.normal(size=[3, 4, 5]).astype(np.float32)
-            x_ph = tf.placeholder(dtype=tf.float32, shape=[None, None, 5])
+            x_ph = tf.compat.v1.placeholder(dtype=tf.float32, shape=[None, None, 5])
 
             axis = -1
             value_ndims = 1
@@ -272,7 +272,7 @@ class CouplingLayerTestCase(tf.test.TestCase):
         with self.test_session() as sess:
             # test exp scale, primary, NHWC
             x = np.random.normal(size=[11, 13, 32, 31, 11]).astype(np.float32)
-            x_ph = tf.placeholder(dtype=tf.float32,
+            x_ph = tf.compat.v1.placeholder(dtype=tf.float32,
                                   shape=[None, None, None, None, 11])
 
             axis = -1
@@ -300,7 +300,7 @@ class CouplingLayerTestCase(tf.test.TestCase):
 
             # test sigmoid scale, secondary, NCHW
             x = np.transpose(x, [0, 1, 4, 2, 3])
-            x_ph = tf.placeholder(dtype=tf.float32,
+            x_ph = tf.compat.v1.placeholder(dtype=tf.float32,
                                   shape=[None, None, 11, None, None])
 
             axis = -3

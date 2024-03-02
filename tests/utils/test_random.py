@@ -35,7 +35,7 @@ class VarScopeRandomStateTestCase(tf.test.TestCase):
 
     def test_VarScopeRandomState(self):
         def get_seq():
-            state = VarScopeRandomState(tf.get_variable_scope())
+            state = VarScopeRandomState(tf.compat.v1.get_variable_scope())
             return state.randint(0, 0xffffffff, size=[100])
 
         with tf.Graph().as_default():

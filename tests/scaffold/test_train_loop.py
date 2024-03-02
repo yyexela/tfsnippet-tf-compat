@@ -272,7 +272,7 @@ class TrainLoopTestCase(tf.test.TestCase):
 
     def test_valid_metric_with_custom_settings(self):
         logs = []
-        v = tf.get_variable('a', shape=[1], dtype=tf.int32)
+        v = tf.compat.v1.get_variable('a', shape=[1], dtype=tf.int32)
         with TrainLoop([v], print_func=logs.append, show_eta=False,
                        valid_metric_name='y',
                        valid_metric_smaller_is_better=False) as loop:
@@ -312,8 +312,8 @@ class TrainLoopTestCase(tf.test.TestCase):
             self.assertTrue(loop.valid_metric_smaller_is_better)
 
     def test_training_summary(self):
-        a = tf.get_variable('a', dtype=tf.float32, shape=(2, 3))
-        b = tf.get_variable('b', dtype=tf.float32, shape=(4,))
+        a = tf.compat.v1.get_variable('a', dtype=tf.float32, shape=(2, 3))
+        b = tf.compat.v1.get_variable('b', dtype=tf.float32, shape=(4,))
 
         # test param variables in list
         logs = []
@@ -466,8 +466,8 @@ class TrainLoopTestCase(tf.test.TestCase):
 
     def test_early_stopping(self):
         with self.test_session():
-            a = tf.get_variable('a', shape=(), dtype=tf.int32)
-            b = tf.get_variable('b', shape=(), dtype=tf.int32)
+            a = tf.compat.v1.get_variable('a', shape=(), dtype=tf.int32)
+            b = tf.compat.v1.get_variable('b', shape=(), dtype=tf.int32)
 
             # test early-stopping with no valid metric committed
             set_variable_values([a, b], [1, 2])
@@ -505,7 +505,7 @@ class TrainLoopTestCase(tf.test.TestCase):
 
     def test_tensor_arguments(self):
         with self.test_session():
-            a = tf.get_variable('a', initializer=0, dtype=tf.int32)
+            a = tf.compat.v1.get_variable('a', initializer=0, dtype=tf.int32)
             ensure_variables_initialized()
             with TrainLoop([a],
                            early_stopping=True,

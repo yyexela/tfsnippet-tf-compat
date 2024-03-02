@@ -73,12 +73,12 @@ def get_variables_as_dict(scope=None, collection=tf.compat.v1.GraphKeys.GLOBAL_V
     Get TensorFlow variables as dict.
 
     Args:
-        scope (str or tf.VariableScope or None): If :obj:`None`, will collect
+        scope (str or tf.compat.v1.VariableScope or None): If :obj:`None`, will collect
             all the variables within current graph.  If a :class:`str` or a
-            :class:`tf.VariableScope`, will collect the variables only from
+            :class:`tf.compat.v1.VariableScope`, will collect the variables only from
             this scope. (default :obj:`None`)
         collection (str): Collect the variables only from this collection.
-            (default ``tf.GraphKeys.GLOBAL_VARIABLES``)
+            (default ``tf.compat.v1.GraphKeys.GLOBAL_VARIABLES``)
 
     Returns:
         dict[str, tf.Variable]: Dict which maps from names to TensorFlow
@@ -88,7 +88,7 @@ def get_variables_as_dict(scope=None, collection=tf.compat.v1.GraphKeys.GLOBAL_V
             without the common scope name prefix.
     """
     # get the common prefix to be stripped
-    if isinstance(scope, tf.VariableScope):
+    if isinstance(scope, tf.compat.v1.VariableScope):
         scope_name = scope.name
     else:
         scope_name = scope
@@ -111,7 +111,7 @@ def get_uninitialized_variables(variables=None, name=None):
     Args:
         variables (list[tf.Variable]): Collect only uninitialized variables
             within this list. If not specified, will collect all uninitialized
-            variables within ``tf.GraphKeys.GLOBAL_VARIABLES`` collection.
+            variables within ``tf.compat.v1.GraphKeys.GLOBAL_VARIABLES`` collection.
         name (str): TensorFlow name scope of the graph nodes.
 
     Returns:
@@ -137,7 +137,7 @@ def ensure_variables_initialized(variables=None, name=None):
         variables (list[tf.Variable] or dict[str, tf.Variable]): Ensure only
             the variables within this collection to be initialized. If not
             specified, will ensure all variables within the collection
-            `tf.GraphKeys.GLOBAL_VARIABLES` to be initialized.
+            `tf.compat.v1.GraphKeys.GLOBAL_VARIABLES` to be initialized.
         name (str): TensorFlow name scope of the graph nodes. (default
             `ensure_variables_initialized`)
     """
@@ -147,7 +147,7 @@ def ensure_variables_initialized(variables=None, name=None):
         uninitialized = get_uninitialized_variables(variables)
         if uninitialized:
             sess = get_default_session_or_error()
-            sess.run(tf.variables_initializer(uninitialized))
+            sess.run(tf.compat.v1.variables_initializer(uninitialized))
 
 
 def get_variable_ddi(name,
@@ -161,7 +161,7 @@ def get_variable_ddi(name,
                      collections=None,
                      **kwargs):
     """
-    Wraps :func:`tf.get_variable` to support data-dependent initialization.
+    Wraps :func:`tf.compat.v1.get_variable` to support data-dependent initialization.
 
     Args:
         name: Name of the variable.
@@ -174,13 +174,13 @@ def get_variable_ddi(name,
         constraint: Constraint of the variable.
         trainable (bool): Whether or not to the variable is trainable?
         collections (Iterable[str]): Add the variable to these collections.
-        \\**kwargs: Other named parameters passed to :func:`tf.get_variable`.
+        \\**kwargs: Other named parameters passed to :func:`tf.compat.v1.get_variable`.
 
     Returns:
         tf.Variable or tf.Tensor: The variable or the tensor.
     """
     # TODO: detect shape from `initial_value` if not specified
-    v = tf.get_variable(
+    v = tf.compat.v1.get_variable(
         name, shape=shape, dtype=dtype, regularizer=regularizer,
         constraint=constraint, trainable=trainable, collections=collections,
         **kwargs

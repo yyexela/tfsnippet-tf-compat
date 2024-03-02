@@ -128,7 +128,7 @@ class PlanarNormalizingFlow(FeatureMappingFlow):
             phi = grad * w  # shape == [?, n_units]
             u_phi = tf.matmul(phi, u_hat, transpose_b=True)  # shape == [?, 1]
             det_jac = 1. + u_phi  # shape == [?, 1]
-            log_det = tf.log(tf.abs(det_jac))  # shape == [?, 1]
+            log_det = tf.math.log(tf.abs(det_jac))  # shape == [?, 1]
             log_det = unflatten_from_ndims(tf.squeeze(log_det, -1), s1, s2)
 
         # now returns the transformed sample and log-determinant

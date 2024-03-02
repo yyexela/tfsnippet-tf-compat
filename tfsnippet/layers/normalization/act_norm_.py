@@ -192,7 +192,7 @@ class ActNorm(FeatureMappingFlow):
                 if self._scale_type == 'exp':
                     pre_scale = self._pre_scale.assign(
                         -tf.constant(.5, dtype=dtype) *
-                        tf.log(tf.maximum(x_var, self._epsilon))
+                        tf.math.log(tf.maximum(x_var, self._epsilon))
                     )
                     pre_scale = maybe_check_numerics(
                         pre_scale, 'numeric issues in initializing log_scale')

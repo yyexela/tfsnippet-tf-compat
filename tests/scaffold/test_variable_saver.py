@@ -8,12 +8,12 @@ from tfsnippet.utils import TemporaryDirectory
 class VariablesSaverTestCase(tf.test.TestCase):
 
     def test_save_restore(self):
-        a = tf.get_variable('a', initializer=1, dtype=tf.int32)
-        b = tf.get_variable('b', initializer=2, dtype=tf.int32)
-        c = tf.get_variable('c', initializer=3, dtype=tf.int32)
-        a_ph = tf.placeholder(dtype=tf.int32, shape=(), name='a_ph')
-        b_ph = tf.placeholder(dtype=tf.int32, shape=(), name='b_ph')
-        c_ph = tf.placeholder(dtype=tf.int32, shape=(), name='c_ph')
+        a = tf.compat.v1.get_variable('a', initializer=1, dtype=tf.int32)
+        b = tf.compat.v1.get_variable('b', initializer=2, dtype=tf.int32)
+        c = tf.compat.v1.get_variable('c', initializer=3, dtype=tf.int32)
+        a_ph = tf.compat.v1.placeholder(dtype=tf.int32, shape=(), name='a_ph')
+        b_ph = tf.compat.v1.placeholder(dtype=tf.int32, shape=(), name='b_ph')
+        c_ph = tf.compat.v1.placeholder(dtype=tf.int32, shape=(), name='c_ph')
         assign_op = tf.group(
             tf.assign(a, a_ph),
             tf.assign(b, b_ph),
@@ -61,7 +61,7 @@ class VariablesSaverTestCase(tf.test.TestCase):
 
     def test_non_exist(self):
         with TemporaryDirectory() as tempdir:
-            a = tf.get_variable('a', initializer=1, dtype=tf.int32)
+            a = tf.compat.v1.get_variable('a', initializer=1, dtype=tf.int32)
             saver = VariableSaver([a], tempdir)
             with pytest.raises(
                     IOError,
@@ -71,7 +71,7 @@ class VariablesSaverTestCase(tf.test.TestCase):
 
     def test_errors(self):
         with TemporaryDirectory() as tempdir:
-            a = tf.get_variable('a', initializer=1, dtype=tf.int32)
+            a = tf.compat.v1.get_variable('a', initializer=1, dtype=tf.int32)
             with pytest.raises(
                     ValueError, match='At least 2 versions should be kept'):
                 _ = VariableSaver([a], tempdir, max_versions=1)

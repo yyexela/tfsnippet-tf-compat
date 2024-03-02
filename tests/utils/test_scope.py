@@ -8,8 +8,8 @@ from tfsnippet.utils import *
 
 
 def make_var_and_op(var_name, op_name):
-    vs = tf.get_variable_scope()
-    var = tf.get_variable(var_name, shape=(), dtype=tf.float32)
+    vs = tf.compat.v1.get_variable_scope()
+    var = tf.compat.v1.get_variable(var_name, shape=(), dtype=tf.float32)
     op = tf.add(1, 2, name=op_name)
     return vs, var, op
 
@@ -21,7 +21,7 @@ class GetDefaultScopeNameTestCase(unittest.TestCase):
             pass
 
         class _MyClass2:
-            variable_scope = Mock(tf.VariableScope)
+            variable_scope = Mock(tf.compat.v1.VariableScope)
         _MyClass2.variable_scope.name = 'x'
 
         self.assertEqual(get_default_scope_name('abc'), 'abc')
@@ -39,7 +39,7 @@ class ReopenVariableScopeTestCase(tf.test.TestCase):
 
     def test_reopen_root_variable_scope(self):
         with tf.Graph().as_default():
-            root = tf.get_variable_scope()
+            root = tf.compat.v1.get_variable_scope()
 
             # test to reopen root within root
             with reopen_variable_scope(root):
@@ -78,7 +78,7 @@ class ReopenVariableScopeTestCase(tf.test.TestCase):
 
     def test_errors(self):
         with pytest.raises(TypeError, match='`var_scope` must be an instance '
-                                            'of `tf.VariableScope`'):
+                                            'of `tf.compat.v1.VariableScope`'):
             with reopen_variable_scope(object()):
                 pass
 

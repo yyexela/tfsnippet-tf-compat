@@ -77,11 +77,11 @@ def main():
     results.make_dirs('train_summary', exist_ok=True)
 
     # input placeholders
-    input_x = tf.placeholder(
+    input_x = tf.compat.v1.placeholder(
         dtype=tf.float32, shape=(None, config.x_dim), name='input_x')
-    input_y = tf.placeholder(
+    input_y = tf.compat.v1.placeholder(
         dtype=tf.int32, shape=[None], name='input_y')
-    is_training = tf.placeholder(
+    is_training = tf.compat.v1.placeholder(
         dtype=tf.bool, shape=(), name='is_training')
     learning_rate = spt.AnnealingVariable(
         'learning_rate', config.initial_lr, config.lr_anneal_factor)
@@ -130,7 +130,7 @@ def main():
     train_op = multi_gpu.apply_grads(
         grads=multi_gpu.average_grads(grads),
         optimizer=optimizer,
-        control_inputs=tf.get_collection(tf.GraphKeys.UPDATE_OPS)
+        control_inputs=tf.compat.v1.get_collection(tf.compat.v1.GraphKeys.UPDATE_OPS)
     )
 
     # prepare for training and testing data

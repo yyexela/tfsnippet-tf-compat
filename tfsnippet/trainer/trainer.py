@@ -17,9 +17,9 @@ class Trainer(BaseTrainer):
         import tfsnippet as spt
 
         # build the model
-        input_x = tf.placeholder(...)
-        input_y = tf.placeholder(...)
-        learning_rate = tf.placeholder(...)  # learning rate annealing
+        input_x = tf.compat.v1.placeholder(...)
+        input_y = tf.compat.v1.placeholder(...)
+        learning_rate = tf.compat.v1.placeholder(...)  # learning rate annealing
 
         # prepare for the data and
         train_data = spt.DataFlow.arrays(

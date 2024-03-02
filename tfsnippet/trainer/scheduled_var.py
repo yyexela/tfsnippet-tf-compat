@@ -39,9 +39,9 @@ class ScheduledVariable(TensorWrapper):
                 initial_value = tf.cast(initial_value, dtype=dtype)
 
             collections = list(collections or ())
-            collections += [tf.GraphKeys.GLOBAL_VARIABLES]
+            collections += [tf.compat.v1.GraphKeys.GLOBAL_VARIABLES]
             if model_var:
-                collections += [tf.GraphKeys.MODEL_VARIABLES]
+                collections += [tf.compat.v1.GraphKeys.MODEL_VARIABLES]
             collections = list(set(collections))
 
             self._init(name, initial_value, dtype, collections, **kwargs)
@@ -59,12 +59,12 @@ class ScheduledVariable(TensorWrapper):
             dtype (tf.DType): Data type of the variable.
             collections (list[str]): The variable collections to add.
         """
-        self._self_var = tf.get_variable(
+        self._self_var = tf.compat.v1.get_variable(
             name, dtype=dtype, initializer=initial_value, trainable=False,
             collections=collections
         )
         self._self_read_op = tf.convert_to_tensor(self._self_var)
-        self._self_assign_ph = tf.placeholder(
+        self._self_assign_ph = tf.compat.v1.placeholder(
             dtype=dtype, shape=self._self_var.get_shape())
         self._self_assign_op = tf.assign(
             self._self_var, self._self_assign_ph)

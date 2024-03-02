@@ -41,8 +41,8 @@ class TrainerTestCase(tf.test.TestCase):
             _ = Trainer(loop, train_op, [], df)
 
     def test_run(self):
-        ph = tf.placeholder(tf.int32, [5])
-        var = tf.get_variable('var', shape=[5], dtype=tf.int32,
+        ph = tf.compat.v1.placeholder(tf.int32, [5])
+        var = tf.compat.v1.get_variable('var', shape=[5], dtype=tf.int32,
                               initializer=tf.zeros_initializer())
         summary = tf.summary.histogram(var.name, var)
         train_op = tf.assign(var, ph)
@@ -108,8 +108,8 @@ class LossTrainerTestCase(tf.test.TestCase):
         self.assertEqual('loss', t.metric_name)
 
     def test_run(self):
-        ph = tf.placeholder(tf.int32, [5])
-        var = tf.get_variable('var', shape=[5], dtype=tf.int32,
+        ph = tf.compat.v1.placeholder(tf.int32, [5])
+        var = tf.compat.v1.get_variable('var', shape=[5], dtype=tf.int32,
                               initializer=tf.zeros_initializer())
         train_op = tf.assign(var, ph)
         df = DataFlow.arrays([np.arange(10, 15, dtype=np.int32)], batch_size=5)

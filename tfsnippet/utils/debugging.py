@@ -70,7 +70,7 @@ def maybe_check_numerics(tensor, message, name=None):
     from .config_ import settings
     tensor = tf.convert_to_tensor(tensor)
     if settings.check_numerics:
-        return tf.check_numerics(tensor, message, name=name)
+        return tf.debugging.check_numerics(tensor, message, name=name)
     else:
         return tensor
 

@@ -29,7 +29,7 @@ def get_default_scope_name(name, cls_or_instance=None):
     prefix = ''
     if cls_or_instance is not None:
         if hasattr(cls_or_instance, 'variable_scope') and \
-                isinstance(cls_or_instance.variable_scope, tf.VariableScope):
+                isinstance(cls_or_instance.variable_scope, tf.compat.v1.VariableScope):
             vs_name = cls_or_instance.variable_scope.name
             vs_name = vs_name.rsplit('/', 1)[-1]
             prefix = '{}.'.format(vs_name)
@@ -50,11 +50,11 @@ def reopen_variable_scope(var_scope, **kwargs):
     Reopen the specified `var_scope` and its original name scope.
 
     Args:
-        var_scope (tf.VariableScope): The variable scope instance.
+        var_scope (tf.compat.v1.VariableScope): The variable scope instance.
         **kwargs: Named arguments for opening the variable scope.
     """
     if not isinstance(var_scope, tf.compat.v1.VariableScope):
-        raise TypeError('`var_scope` must be an instance of `tf.VariableScope`')
+        raise TypeError('`var_scope` must be an instance of `tf.compat.v1.VariableScope`')
 
     with tf.variable_scope(var_scope,
                            auxiliary_name_scope=False,
@@ -75,7 +75,7 @@ def root_variable_scope(**kwargs):
     # from empty name.  It always prepend the name of current variable scope
     # to the front of opened variable scope.  So we get the current scope,
     # and pretend it to be the root scope.
-    scope = tf.get_variable_scope()
+    scope = tf.compat.v1.get_variable_scope()
     old_name = scope.name
     try:
         scope._name = ''

@@ -62,7 +62,7 @@ class IsTensorObjectTestCase(unittest.TestCase):
 
     def test_is_tensor_object(self):
         for obj in [tf.constant(0.),  # type: tf.Tensor
-                    tf.get_variable('x', dtype=tf.float32, shape=()),
+                    tf.compat.v1.get_variable('x', dtype=tf.float32, shape=()),
                     TensorWrapper(),
                     StochasticTensor(Mock(is_reparameterized=False),
                                      tf.constant(0.))]:

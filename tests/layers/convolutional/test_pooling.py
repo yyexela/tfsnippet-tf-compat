@@ -170,10 +170,10 @@ class Pooling2DTestCase(tf.test.TestCase):
             # test NCHW, not keep dims
             assert_allclose(f(x, channels_last=False, keepdims=False), a2)
             # test dynamic dimensions, NHWC, not keep dims
-            ph = tf.placeholder(
+            ph = tf.compat.v1.placeholder(
                 dtype=tf.float32, shape=(None, None, None, None, 5))
             assert_allclose(f(x, channels_last=True, keepdims=False, ph=ph), a2)
             # test dynamic dimensions, NCHW
-            ph = tf.placeholder(
+            ph = tf.compat.v1.placeholder(
                 dtype=tf.float32, shape=(None, None, 5, None, None))
             assert_allclose(f(x, channels_last=False, keepdims=True, ph=ph), a1)

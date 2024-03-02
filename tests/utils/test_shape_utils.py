@@ -10,10 +10,10 @@ class IntShapeTestCase(tf.test.TestCase):
     def test_int_shape(self):
         self.assertEqual(get_static_shape(tf.zeros([1, 2, 3])), (1, 2, 3))
         self.assertEqual(
-            get_static_shape(tf.placeholder(tf.float32, [None, 2, 3])),
+            get_static_shape(tf.compat.v1.placeholder(tf.float32, [None, 2, 3])),
             (None, 2, 3)
         )
-        self.assertIsNone(get_static_shape(tf.placeholder(tf.float32, None)))
+        self.assertIsNone(get_static_shape(tf.compat.v1.placeholder(tf.float32, None)))
 
 
 class ResolveNegativeAxisTestCase(tf.test.TestCase):
@@ -38,7 +38,7 @@ class FlattenUnflattenTestCase(tf.test.TestCase):
     def test_flatten_and_unflatten(self):
         def run_check(x, k, dynamic_shape):
             if dynamic_shape:
-                t = tf.placeholder(tf.int32, [None] * len(x.shape))
+                t = tf.compat.v1.placeholder(tf.int32, [None] * len(x.shape))
                 run = lambda sess, *args: sess.run(*args, feed_dict={t: x})
             else:
                 t = tf.constant(x, dtype=tf.int32)
@@ -88,7 +88,7 @@ class FlattenUnflattenTestCase(tf.test.TestCase):
         with pytest.raises(ValueError,
                            match='`x` is required to have known number of '
                                  'dimensions'):
-            _ = flatten_to_ndims(tf.placeholder(tf.float32, None), 1)
+            _ = flatten_to_ndims(tf.compat.v1.placeholder(tf.float32, None), 1)
         with pytest.raises(ValueError,
                            match='`k` is 2, but `x` only has rank 1'):
             _ = flatten_to_ndims(tf.zeros([3]), 2)
@@ -97,7 +97,7 @@ class FlattenUnflattenTestCase(tf.test.TestCase):
         with pytest.raises(ValueError,
                            match='`x` is required to have known number of '
                                  'dimensions'):
-            _ = unflatten_from_ndims(tf.placeholder(tf.float32, None), (1,), (1,))
+            _ = unflatten_from_ndims(tf.compat.v1.placeholder(tf.float32, None), (1,), (1,))
         with pytest.raises(ValueError,
                            match='`x` only has rank 0, required at least 1'):
             _ = unflatten_from_ndims(tf.constant(0.), (1,), (1,))
@@ -128,27 +128,27 @@ class GetBatchSizeTestCase(tf.test.TestCase):
             run_check(sess, x, -1)
 
             # check when some shape is dynamic, but the batch axis is not
-            run_check(sess, x, 0, tf.placeholder(tf.float32, [2, None, None]),
+            run_check(sess, x, 0, tf.compat.v1.placeholder(tf.float32, [2, None, None]),
                       dynamic=False)
-            run_check(sess, x, 1, tf.placeholder(tf.float32, [None, 3, None]),
+            run_check(sess, x, 1, tf.compat.v1.placeholder(tf.float32, [None, 3, None]),
                       dynamic=False)
-            run_check(sess, x, 2, tf.placeholder(tf.float32, [None, None, 4]),
+            run_check(sess, x, 2, tf.compat.v1.placeholder(tf.float32, [None, None, 4]),
                       dynamic=False)
-            run_check(sess, x, -1, tf.placeholder(tf.float32, [None, None, 4]),
+            run_check(sess, x, -1, tf.compat.v1.placeholder(tf.float32, [None, None, 4]),
                       dynamic=False)
 
             # check when the batch axis is dynamic
-            run_check(sess, x, 0, tf.placeholder(tf.float32, [None, 3, 4]),
+            run_check(sess, x, 0, tf.compat.v1.placeholder(tf.float32, [None, 3, 4]),
                       dynamic=True)
-            run_check(sess, x, 1, tf.placeholder(tf.float32, [2, None, 4]),
+            run_check(sess, x, 1, tf.compat.v1.placeholder(tf.float32, [2, None, 4]),
                       dynamic=True)
-            run_check(sess, x, 2, tf.placeholder(tf.float32, [2, 3, None]),
+            run_check(sess, x, 2, tf.compat.v1.placeholder(tf.float32, [2, 3, None]),
                       dynamic=True)
-            run_check(sess, x, -1, tf.placeholder(tf.float32, [2, 3, None]),
+            run_check(sess, x, -1, tf.compat.v1.placeholder(tf.float32, [2, 3, None]),
                       dynamic=True)
 
             # check when the shape is totally dynamic
-            x_in = tf.placeholder(tf.float32, None)
+            x_in = tf.compat.v1.placeholder(tf.float32, None)
             run_check(sess, x, 0, x_in, dynamic=True)
             run_check(sess, x, 1, x_in, dynamic=True)
             run_check(sess, x, 2, x_in, dynamic=True)
@@ -160,15 +160,15 @@ class GetRankTestCase(tf.test.TestCase):
     def test_get_rank(self):
         with self.test_session() as sess:
             # test static shape
-            ph = tf.placeholder(tf.float32, (1, 2, 3))
+            ph = tf.compat.v1.placeholder(tf.float32, (1, 2, 3))
             self.assertEqual(get_rank(ph), 3)
 
             # test partially dynamic shape
-            ph = tf.placeholder(tf.float32, (1, None, 3))
+            ph = tf.compat.v1.placeholder(tf.float32, (1, None, 3))
             self.assertEqual(get_rank(ph), 3)
 
             # test totally dynamic shape
-            ph = tf.placeholder(tf.float32, None)
+            ph = tf.compat.v1.placeholder(tf.float32, None)
             self.assertEqual(
                 sess.run(get_rank(ph), feed_dict={
                     ph: np.arange(6, dtype=np.float32).reshape((1, 2, 3))
@@ -182,11 +182,11 @@ class GetDimensionSizeTestCase(tf.test.TestCase):
     def test_get_dimensions_size(self):
         with self.test_session() as sess:
             # test empty query
-            ph = tf.placeholder(tf.float32, None)
+            ph = tf.compat.v1.placeholder(tf.float32, None)
             self.assertTupleEqual(get_dimensions_size(ph, ()), ())
 
             # test static shape
-            ph = tf.placeholder(tf.float32, (1, 2, 3))
+            ph = tf.compat.v1.placeholder(tf.float32, (1, 2, 3))
             self.assertTupleEqual(get_dimensions_size(ph), (1, 2, 3))
             self.assertTupleEqual(get_dimensions_size(ph, [0]), (1,))
             self.assertTupleEqual(get_dimensions_size(ph, [1]), (2,))
@@ -194,7 +194,7 @@ class GetDimensionSizeTestCase(tf.test.TestCase):
             self.assertTupleEqual(get_dimensions_size(ph, [2, 0, 1]), (3, 1, 2))
 
             # test dynamic shape, but no dynamic axis is queried
-            ph = tf.placeholder(tf.float32, (1, None, 3))
+            ph = tf.compat.v1.placeholder(tf.float32, (1, None, 3))
             self.assertTupleEqual(get_dimensions_size(ph, [0]), (1,))
             self.assertTupleEqual(get_dimensions_size(ph, [2]), (3,))
             self.assertTupleEqual(get_dimensions_size(ph, [2, 0]), (3, 1))
@@ -205,13 +205,13 @@ class GetDimensionSizeTestCase(tf.test.TestCase):
                 self.assertIsInstance(a, tf.Tensor)
                 np.testing.assert_equal(sess.run(a, feed_dict={ph: ph_in}), b)
 
-            ph = tf.placeholder(tf.float32, (1, None, 3))
+            ph = tf.compat.v1.placeholder(tf.float32, (1, None, 3))
             _assert_equal(get_dimensions_size(ph), (1, 2, 3))
             _assert_equal(get_dimensions_size(ph, [1]), (2,))
             _assert_equal(get_dimensions_size(ph, [2, 0, 1]), (3, 1, 2))
 
             # test fully dynamic shape
-            ph = tf.placeholder(tf.float32, None)
+            ph = tf.compat.v1.placeholder(tf.float32, None)
             _assert_equal(get_dimensions_size(ph), (1, 2, 3))
             _assert_equal(get_dimensions_size(ph, [0]), (1,))
             _assert_equal(get_dimensions_size(ph, [1]), (2,))
@@ -221,7 +221,7 @@ class GetDimensionSizeTestCase(tf.test.TestCase):
     def test_get_shape(self):
         with self.test_session() as sess:
             # test static shape
-            ph = tf.placeholder(tf.float32, (1, 2, 3))
+            ph = tf.compat.v1.placeholder(tf.float32, (1, 2, 3))
             self.assertTupleEqual(get_shape(ph), (1, 2, 3))
 
             # test dynamic shape
@@ -230,11 +230,11 @@ class GetDimensionSizeTestCase(tf.test.TestCase):
                 self.assertIsInstance(a, tf.Tensor)
                 np.testing.assert_equal(sess.run(a, feed_dict={ph: ph_in}), b)
 
-            ph = tf.placeholder(tf.float32, (1, None, 3))
+            ph = tf.compat.v1.placeholder(tf.float32, (1, None, 3))
             _assert_equal(get_shape(ph), (1, 2, 3))
 
             # test fully dynamic shape
-            ph = tf.placeholder(tf.float32, None)
+            ph = tf.compat.v1.placeholder(tf.float32, None)
             _assert_equal(get_shape(ph), (1, 2, 3))
 
 
@@ -296,17 +296,17 @@ class IsShapeEqualTestCase(tf.test.TestCase):
             check(x1, x3)
 
             # check partial dynamic shapes
-            x1_ph = tf.placeholder(dtype=tf.float32, shape=[2, None, 4])
-            x2_ph = tf.placeholder(dtype=tf.float32, shape=[2, None, 4])
-            x3_ph = tf.placeholder(dtype=tf.float32, shape=[None] * 4)
+            x1_ph = tf.compat.v1.placeholder(dtype=tf.float32, shape=[2, None, 4])
+            x2_ph = tf.compat.v1.placeholder(dtype=tf.float32, shape=[2, None, 4])
+            x3_ph = tf.compat.v1.placeholder(dtype=tf.float32, shape=[None] * 4)
             check(x1, np.copy(x1), x1_ph, x2_ph)
             check(x1, x2, x1_ph, x2_ph)
             check(x1, x3, x1_ph, x3_ph)
 
             # check fully dimension shapes
-            x1_ph = tf.placeholder(dtype=tf.float32, shape=None)
-            x2_ph = tf.placeholder(dtype=tf.float32, shape=None)
-            x3_ph = tf.placeholder(dtype=tf.float32, shape=None)
+            x1_ph = tf.compat.v1.placeholder(dtype=tf.float32, shape=None)
+            x2_ph = tf.compat.v1.placeholder(dtype=tf.float32, shape=None)
+            x3_ph = tf.compat.v1.placeholder(dtype=tf.float32, shape=None)
             check(x1, np.copy(x1), x1_ph, x2_ph)
             check(x1, x2, x1_ph, x2_ph)
             check(x1, x3, x1_ph, x3_ph)
@@ -363,7 +363,7 @@ class BroadcastTestCase(tf.test.TestCase):
             check(x, (1, 1))
 
             # -- partially dynamic shapes on broadcast axis --
-            x_ph = tf.placeholder(shape=(2, None, 3), dtype=tf.float32)
+            x_ph = tf.compat.v1.placeholder(shape=(2, None, 3), dtype=tf.float32)
 
             # good cases
             check(x, (3, 2, 5, 3), x_ph=x_ph, static_shape=(3, 2, 5, 3))
@@ -376,7 +376,7 @@ class BroadcastTestCase(tf.test.TestCase):
             check(x, (1, 1), x_ph=x_ph)
 
             # -- partially dynamic shapes on non-broadcast axis --
-            x_ph = tf.placeholder(shape=(None, 1, 3), dtype=tf.float32)
+            x_ph = tf.compat.v1.placeholder(shape=(None, 1, 3), dtype=tf.float32)
 
             # good cases
             check(x, (3, 2, 5, 3), x_ph=x_ph, static_shape=(3, 2, 5, 3))
@@ -389,7 +389,7 @@ class BroadcastTestCase(tf.test.TestCase):
             check(x, (1, 1), x_ph=x_ph)
 
             # -- partially dynamic shapes on all axis --
-            x_ph = tf.placeholder(shape=(None, None, None), dtype=tf.float32)
+            x_ph = tf.compat.v1.placeholder(shape=(None, None, None), dtype=tf.float32)
 
             # good cases
             check(x, (3, 2, 5, 3), x_ph=x_ph, static_shape=(3, 2, 5, 3))
@@ -402,8 +402,8 @@ class BroadcastTestCase(tf.test.TestCase):
             check(x, (1, 1), x_ph=x_ph)
 
             # -- fully dynamic shapes --
-            x_ph = tf.placeholder(shape=None, dtype=tf.float32)
-            shape_ph = tf.placeholder(shape=None, dtype=tf.int32)
+            x_ph = tf.compat.v1.placeholder(shape=None, dtype=tf.float32)
+            shape_ph = tf.compat.v1.placeholder(shape=None, dtype=tf.int32)
 
             # good cases
             check(x, (3, 2, 5, 3), x_ph=x_ph, shape_ph=shape_ph)
@@ -464,7 +464,7 @@ class BroadcastTestCase(tf.test.TestCase):
             check(x, (1, 1))
 
             # -- partially dynamic shapes on all axis --
-            x_ph = tf.placeholder(shape=(None, None, None), dtype=tf.float32)
+            x_ph = tf.compat.v1.placeholder(shape=(None, None, None), dtype=tf.float32)
 
             # good cases
             check(x, (3, 2, 5, 3), x_ph=x_ph, static_shape=(3, 2, 5, 3))
@@ -477,7 +477,7 @@ class BroadcastTestCase(tf.test.TestCase):
             check(x, (1, 1), x_ph=x_ph)
 
             # -- fully dynamic shapes on x --
-            x_ph = tf.placeholder(shape=None, dtype=tf.float32)
+            x_ph = tf.compat.v1.placeholder(shape=None, dtype=tf.float32)
 
             # good cases
             check(x, (3, 2, 5, 3), x_ph=x_ph)
@@ -490,8 +490,8 @@ class BroadcastTestCase(tf.test.TestCase):
             check(x, (1, 1), x_ph=x_ph)
 
             # -- fully dynamic shapes on both x and shape --
-            x_ph = tf.placeholder(shape=None, dtype=tf.float32)
-            shape_ph = tf.placeholder(shape=None, dtype=tf.int32)
+            x_ph = tf.compat.v1.placeholder(shape=None, dtype=tf.float32)
+            shape_ph = tf.compat.v1.placeholder(shape=None, dtype=tf.int32)
 
             # good cases
             check(x, (3, 2, 5, 3), x_ph=x_ph, shape_ph=shape_ph)
@@ -509,10 +509,10 @@ class TransposeConv2dAxisTestCase(tf.test.TestCase):
     def test_transpose_conv2d_axis(self):
         np.random.seed(1234)
         x = np.random.normal(size=[17, 11, 32, 31, 5]).astype(np.float32)
-        x_ph = tf.placeholder(tf.float32, [None, None, None, None, 5])
+        x_ph = tf.compat.v1.placeholder(tf.float32, [None, None, None, None, 5])
         y = np.transpose(x, [0, 1, 4, 2, 3])
         self.assertEqual(y.shape, (17, 11, 5, 32, 31))
-        y_ph = tf.placeholder(tf.float32, [None, None, 5, None, None])
+        y_ph = tf.compat.v1.placeholder(tf.float32, [None, None, 5, None, None])
 
         g = lambda x, f, t, ph=None: sess.run(
             transpose_conv2d_axis(tf.constant(x), f, t),
@@ -597,7 +597,7 @@ class ReshapeTailTestCase(tf.test.TestCase):
             check(x, 3, [3, -1], (3, 40), (3, 40))
 
             # check dynamic shape #1
-            x_ph = tf.placeholder(dtype=tf.float32, shape=[None, 5, 6])
+            x_ph = tf.compat.v1.placeholder(dtype=tf.float32, shape=[None, 5, 6])
 
             check(x, 0, [], (4, 5, 6), (None, 5, 6), x_ph=x_ph)
             check(x, 0, [1, 1], (4, 5, 6, 1, 1), (None, 5, 6, 1, 1),
@@ -611,7 +611,7 @@ class ReshapeTailTestCase(tf.test.TestCase):
             check(x, 3, [3, -1], (3, 40), (3, None), x_ph=x_ph)
 
             # check dynamic shape #2
-            x_ph = tf.placeholder(dtype=tf.float32, shape=[None, 5, None])
+            x_ph = tf.compat.v1.placeholder(dtype=tf.float32, shape=[None, 5, None])
 
             check(x, 0, [], (4, 5, 6), (None, 5, None), x_ph=x_ph)
             check(x, 0, [1, 1], (4, 5, 6, 1, 1), (None, 5, None, 1, 1),
@@ -625,8 +625,8 @@ class ReshapeTailTestCase(tf.test.TestCase):
             check(x, 3, [3, -1], (3, 40), (3, None), x_ph=x_ph)
 
             # check fully dynamic shape
-            x_ph = tf.placeholder(dtype=tf.float32, shape=None)
-            shape_ph = tf.placeholder(dtype=tf.int32, shape=None)
+            x_ph = tf.compat.v1.placeholder(dtype=tf.float32, shape=None)
+            shape_ph = tf.compat.v1.placeholder(dtype=tf.int32, shape=None)
 
             check(x, 0, [], (4, 5, 6), x_ph=x_ph, shape_ph=shape_ph)
             check(x, 0, [1, 1], (4, 5, 6, 1, 1), x_ph=x_ph, shape_ph=shape_ph)

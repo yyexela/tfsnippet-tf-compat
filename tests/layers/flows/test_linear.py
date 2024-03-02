@@ -47,7 +47,7 @@ class InvertibleDenseTestCase(tf.test.TestCase):
 
         with self.test_session() as sess:
             x = np.random.normal(size=[3, 5, 7]).astype(np.float32)
-            x_ph = tf.placeholder(dtype=tf.float32, shape=[None, None, 7])
+            x_ph = tf.compat.v1.placeholder(dtype=tf.float32, shape=[None, None, 7])
             kernel = np.random.normal(size=(7, 7)).astype(x.dtype)
             y, log_det = naive_invertible_linear(x, kernel, -1, 1)
 
@@ -70,7 +70,7 @@ class InvertibleDenseTestCase(tf.test.TestCase):
 
             assert_variables(['matrix'], trainable=True,
                              scope='invertible_dense/kernel',
-                             collections=[tf.GraphKeys.MODEL_VARIABLES])
+                             collections=[tf.compat.v1.GraphKeys.MODEL_VARIABLES])
 
         # test non-trainable
         with tf.Graph().as_default():
@@ -78,7 +78,7 @@ class InvertibleDenseTestCase(tf.test.TestCase):
             layer.apply(tf.zeros([2, 3, 4, 5]))
             assert_variables(['matrix'], trainable=False,
                              scope='invertible_dense/kernel',
-                             collections=[tf.GraphKeys.MODEL_VARIABLES])
+                             collections=[tf.compat.v1.GraphKeys.MODEL_VARIABLES])
 
 
 class InvertibleConv2dTestCase(tf.test.TestCase):
@@ -112,11 +112,11 @@ class InvertibleConv2dTestCase(tf.test.TestCase):
 
             assert_variables(['matrix'], trainable=True,
                              scope='invertible_conv2d/kernel',
-                             collections=[tf.GraphKeys.MODEL_VARIABLES])
+                             collections=[tf.compat.v1.GraphKeys.MODEL_VARIABLES])
 
             # test channels_last = False, dynamic input
             x = np.random.normal(size=[3, 4, 5, 6, 7]).astype(np.float32)
-            x_ph = tf.placeholder(dtype=tf.float32,
+            x_ph = tf.compat.v1.placeholder(dtype=tf.float32,
                                   shape=[None, None, 5, None, None])
             kernel = np.random.normal(size=(5, 5)).astype(x.dtype)
             y, log_det = naive_invertible_linear(x, kernel, -3, 3)
@@ -141,7 +141,7 @@ class InvertibleConv2dTestCase(tf.test.TestCase):
 
             assert_variables(['matrix'], trainable=True,
                              scope='invertible_conv2d/kernel',
-                             collections=[tf.GraphKeys.MODEL_VARIABLES])
+                             collections=[tf.compat.v1.GraphKeys.MODEL_VARIABLES])
 
         # test non-trainable
         with tf.Graph().as_default():
@@ -149,4 +149,4 @@ class InvertibleConv2dTestCase(tf.test.TestCase):
             layer.apply(tf.zeros([3, 4, 5, 6, 7]))
             assert_variables(['matrix'], trainable=False,
                              scope='invertible_conv2d/kernel',
-                             collections=[tf.GraphKeys.MODEL_VARIABLES])
+                             collections=[tf.compat.v1.GraphKeys.MODEL_VARIABLES])
