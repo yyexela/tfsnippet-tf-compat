@@ -198,7 +198,7 @@ def instance_reuse(method_or_scope=None, _sentinel=None, scope=None):
 
         # now ready to create the variable scope for the method
         if obj not in variable_scopes:
-            graph = tf.get_default_graph()
+            graph = tf.compat.v1.get_default_graph()
 
             # Branch #1.1: first time to enter the method, and we are not
             #   in the object's variable scope.  We should first pick up

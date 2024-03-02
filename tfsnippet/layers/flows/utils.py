@@ -123,7 +123,7 @@ def assert_log_det_shape_matches_input(log_det, input, value_ndims, name=None):
             return None
 
         else:
-            return tf.assert_equal(cmp_result, True, message=error_message)
+            return tf.compat.v1.assert_equal(cmp_result, True, message=error_message)
 
 
 @add_name_arg_doc

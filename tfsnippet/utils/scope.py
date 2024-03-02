@@ -53,7 +53,7 @@ def reopen_variable_scope(var_scope, **kwargs):
         var_scope (tf.VariableScope): The variable scope instance.
         **kwargs: Named arguments for opening the variable scope.
     """
-    if not isinstance(var_scope, tf.VariableScope):
+    if not isinstance(var_scope, tf.compat.v1.VariableScope):
         raise TypeError('`var_scope` must be an instance of `tf.VariableScope`')
 
     with tf.variable_scope(var_scope,

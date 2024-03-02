@@ -53,7 +53,7 @@ class VariableSaver(VarScopeObject):
         super(VariableSaver, self).__init__(scope, name)
 
         with reopen_variable_scope(self.variable_scope):
-            self._saver = tf.train.Saver(
+            self._saver = tf.compat.v1.train.Saver(
                 var_list=self.variables, max_to_keep=self.max_versions,
                 name='saver'
             )
