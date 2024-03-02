@@ -62,7 +62,7 @@ class GetVariablesTestCase(tf.test.TestCase):
         c = tf.compat.v1.get_variable(
             'c', shape=(), collections=[MODEL_VARIABLES])
 
-        with tf.variable_scope('child') as child:
+        with tf.compat.v1.variable_scope('child') as child:
             child_a = tf.compat.v1.get_variable(
                 'a', shape=(),
                 collections=[GLOBAL_VARIABLES, MODEL_VARIABLES])

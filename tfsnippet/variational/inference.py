@@ -280,7 +280,7 @@ class VariationalTrainingObjectives(object):
         """
         # reinforce requires extra variables to collect the moving average
         # statistics, so we need to generate a variable scope
-        with tf.variable_scope(name, default_name='reinforce'):
+        with tf.compat.v1.variable_scope(name, default_name='reinforce'):
             return self._vi.zs_elbo().reinforce(
                 variance_reduction=variance_reduction,
                 baseline=baseline,

@@ -185,7 +185,7 @@ def planar_normalizing_flows(
         return PlanarNormalizingFlow(name=name, scope=scope, **flow_kwargs)
 
     else:
-        with tf.variable_scope(
+        with tf.compat.v1.variable_scope(
                 scope, default_name=name or 'planar_normalizing_flows'):
             flows = []
             for i in range(n_layers):

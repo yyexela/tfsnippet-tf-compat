@@ -122,7 +122,7 @@ def conv2d(input,
         bias = bias_spec.validate('bias', bias)
 
     # the main part of the conv2d layer
-    with tf.variable_scope(scope, default_name=name or 'conv2d'):
+    with tf.compat.v1.variable_scope(scope, default_name=name or 'conv2d'):
         # create the variables
         if kernel is None:
             kernel = model_variable(
@@ -299,7 +299,7 @@ def deconv2d(input,
         bias = bias_spec.validate('bias', bias)
 
     # the main part of the conv2d layer
-    with tf.variable_scope(scope, default_name=name or 'deconv2d'):
+    with tf.compat.v1.variable_scope(scope, default_name=name or 'deconv2d'):
         with tf.name_scope('output_shape'):
             # detect the input shape and axis arrangements
             input_shape = get_static_shape(input)

@@ -71,7 +71,7 @@ def weight_norm(kernel,
     axis = resolve_negative_axis(len(kernel_shape), axis)
     reduce_axis = tuple(a for a in range(len(kernel_shape)) if a not in axis)
 
-    with tf.variable_scope(scope, default_name=name or 'weight_norm'):
+    with tf.compat.v1.variable_scope(scope, default_name=name or 'weight_norm'):
         # normalize the kernel
         kernel = maybe_check_numerics(
             tf.nn.l2_normalize(kernel, axis=reduce_axis, epsilon=epsilon),

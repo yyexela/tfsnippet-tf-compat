@@ -56,7 +56,7 @@ def reopen_variable_scope(var_scope, **kwargs):
     if not isinstance(var_scope, tf.compat.v1.VariableScope):
         raise TypeError('`var_scope` must be an instance of `tf.compat.v1.VariableScope`')
 
-    with tf.variable_scope(var_scope,
+    with tf.compat.v1.variable_scope(var_scope,
                            auxiliary_name_scope=False,
                            **kwargs) as vs:
         with tf.name_scope(var_scope.original_name_scope):
@@ -71,7 +71,7 @@ def root_variable_scope(**kwargs):
     Args:
         **kwargs: Named arguments for opening the root variable scope.
     """
-    # `tf.variable_scope` does not support opening the root variable scope
+    # `tf.compat.v1.variable_scope` does not support opening the root variable scope
     # from empty name.  It always prepend the name of current variable scope
     # to the front of opened variable scope.  So we get the current scope,
     # and pretend it to be the root scope.

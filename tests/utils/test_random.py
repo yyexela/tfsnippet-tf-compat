@@ -41,27 +41,27 @@ class VarScopeRandomStateTestCase(tf.test.TestCase):
         with tf.Graph().as_default():
             VarScopeRandomState.set_global_seed(0)
 
-            with tf.variable_scope('a'):
+            with tf.compat.v1.variable_scope('a'):
                 a = get_seq()
 
-            with tf.variable_scope('a'):
+            with tf.compat.v1.variable_scope('a'):
                 np.testing.assert_equal(get_seq(), a)
 
-            with tf.variable_scope('b'):
+            with tf.compat.v1.variable_scope('b'):
                 self.assertFalse(np.all(get_seq() == a))
 
         with tf.Graph().as_default():
             VarScopeRandomState.set_global_seed(0)
 
-            with tf.variable_scope('a'):
+            with tf.compat.v1.variable_scope('a'):
                 np.testing.assert_equal(get_seq(), a)
 
             VarScopeRandomState.set_global_seed(1)
 
-            with tf.variable_scope('a'):
+            with tf.compat.v1.variable_scope('a'):
                 self.assertFalse(np.all(get_seq() == a))
 
             VarScopeRandomState.set_global_seed(0)
 
-            with tf.variable_scope('a'):
+            with tf.compat.v1.variable_scope('a'):
                 np.testing.assert_equal(get_seq(), a)

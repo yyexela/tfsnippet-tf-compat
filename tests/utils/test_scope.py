@@ -49,7 +49,7 @@ class ReopenVariableScopeTestCase(tf.test.TestCase):
                 self.assertEqual(op.name, 'op:0')
 
             # test to reopen root within another variable scope
-            with tf.variable_scope('a') as a:
+            with tf.compat.v1.variable_scope('a') as a:
                 with reopen_variable_scope(root):
                     vs, v2, op = make_var_and_op('v2', 'op')
                     self.assertEqual(vs.name, '')
@@ -58,7 +58,7 @@ class ReopenVariableScopeTestCase(tf.test.TestCase):
 
     def test_reopen_variable_scope(self):
         with tf.Graph().as_default():
-            with tf.variable_scope('the_scope') as the_scope:
+            with tf.compat.v1.variable_scope('the_scope') as the_scope:
                 pass
 
             # test to reopen within root
@@ -69,7 +69,7 @@ class ReopenVariableScopeTestCase(tf.test.TestCase):
                 self.assertEqual(op.name, 'the_scope/op:0')
 
             # test to reopen within another variable scope
-            with tf.variable_scope('another'):
+            with tf.compat.v1.variable_scope('another'):
                 with reopen_variable_scope(the_scope):
                     vs, v2, op = make_var_and_op('v2', 'op')
                     self.assertEqual(vs.name, 'the_scope')
@@ -96,21 +96,21 @@ class RootVariableScopeTestCase(tf.test.TestCase):
                 self.assertEqual(op.name, 'op:0')
 
                 # enter a new variable scope with determined name
-                with tf.variable_scope('vs'):
+                with tf.compat.v1.variable_scope('vs'):
                     vs, v2, op = make_var_and_op('v2', 'op')
                     self.assertEqual(vs.name, 'vs')
                     self.assertEqual(v2.name, 'vs/v2:0')
                     self.assertEqual(op.name, 'vs/op:0')
 
                 # enter a reused variable scope with determined name
-                with tf.variable_scope('vs', reuse=True):
+                with tf.compat.v1.variable_scope('vs', reuse=True):
                     vs, v2, op = make_var_and_op('v2', 'op')
                     self.assertEqual(vs.name, 'vs')
                     self.assertEqual(v2.name, 'vs/v2:0')
                     self.assertEqual(op.name, 'vs_1/op:0')
 
                 # enter a new variable scope with uniquified name
-                with tf.variable_scope(None, default_name='vs'):
+                with tf.compat.v1.variable_scope(None, default_name='vs'):
                     vs, v3, op = make_var_and_op('v3', 'op')
                     self.assertEqual(vs.name, 'vs_1')
                     self.assertEqual(v3.name, 'vs_1/v3:0')
@@ -120,7 +120,7 @@ class RootVariableScopeTestCase(tf.test.TestCase):
             # open the root vs within a parent scope
             # using root_variable_scope will cause the name scope to be
             # reset to the root name scope.
-            with tf.variable_scope('parent'):
+            with tf.compat.v1.variable_scope('parent'):
                 with root_variable_scope():
                     vs, v4, op = make_var_and_op('v4', 'op')
                     self.assertEqual(vs.name, '')
@@ -128,10 +128,10 @@ class RootVariableScopeTestCase(tf.test.TestCase):
                     self.assertEqual(op.name, 'op_1:0')
 
             # as a contrary, if we open the root scope directly using
-            # tf.variable_scope, we will end up with still the nested
+            # tf.compat.v1.variable_scope, we will end up with still the nested
             # name scope
-            with tf.variable_scope('outside'):
-                with tf.variable_scope(root):
+            with tf.compat.v1.variable_scope('outside'):
+                with tf.compat.v1.variable_scope(root):
                     vs, v5, op = make_var_and_op('v5', 'op')
                     self.assertEqual(vs.name, '')
                     self.assertEqual(v5.name, 'v5:0')

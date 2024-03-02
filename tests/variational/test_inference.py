@@ -98,7 +98,7 @@ class VariationalInferenceTestCase(tf.test.TestCase):
             # REINFORCE requires additional moving average variable, causing
             # it very hard to ensure two calls should have identical outputs.
             # So we disable such tests for the time being.
-            with tf.variable_scope(None, default_name='reinforce'):
+            with tf.compat.v1.variable_scope(None, default_name='reinforce'):
                 # reinforce requires extra variables, but ZhuSuan does not
                 # obtain a dedicated variable scope.  so we open one here.
                 zs_reinforce = zs_obj.reinforce(variance_reduction=False)
@@ -139,7 +139,7 @@ class VariationalInferenceTestCase(tf.test.TestCase):
             # REINFORCE requires additional moving average variable, causing
             # it very hard to ensure two calls should have identical outputs.
             # So we disable such tests for the time being.
-            with tf.variable_scope(None, default_name='reinforce'):
+            with tf.compat.v1.variable_scope(None, default_name='reinforce'):
                 # reinforce requires extra variables, but ZhuSuan does not
                 # obtain a dedicated variable scope.  so we open one here.
                 zs_reinforce = zs_obj.reinforce(variance_reduction=False)

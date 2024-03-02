@@ -23,9 +23,9 @@ def _make_variable_scope():
 def _make_variable_scopes():
     vs = tf.compat.v1.get_variable_scope()
     assert(vs.name == get_reuse_stack_top().name)
-    with tf.variable_scope(None, default_name='vs') as vs1:
+    with tf.compat.v1.variable_scope(None, default_name='vs') as vs1:
         var1 = tf.compat.v1.get_variable('var', shape=(), dtype=tf.float32)
-    with tf.variable_scope(None, default_name='vs') as vs2:
+    with tf.compat.v1.variable_scope(None, default_name='vs') as vs2:
         var2 = tf.compat.v1.get_variable('var', shape=(), dtype=tf.float32)
     return (vs1, var1), (vs2, var2)
 
@@ -96,7 +96,7 @@ class InstanceReuseTestCase(tf.test.TestCase):
             self.assertEqual(op.name, 'foo_1/op:0')
 
             # now we enter a variable scope, and then call `foo` twice.
-            with tf.variable_scope('parent'):
+            with tf.compat.v1.variable_scope('parent'):
                 # call the method for the first time
                 vs, var, op = o.foo()
                 self.assertEqual(vs.name, 'o/foo')
@@ -116,7 +116,7 @@ class InstanceReuseTestCase(tf.test.TestCase):
                 return _make_var_and_op()
 
         with tf.Graph().as_default():
-            with tf.variable_scope('parent'):
+            with tf.compat.v1.variable_scope('parent'):
                 o = MyScopeObject('o')
 
             # test enter for the first time
@@ -133,7 +133,7 @@ class InstanceReuseTestCase(tf.test.TestCase):
             self.assertEqual(op.name, 'foo_1/op:0')
 
             # now we enter a variable scope, and then call `foo` twice.
-            with tf.variable_scope('another'):
+            with tf.compat.v1.variable_scope('another'):
                 # call the method for the first time
                 vs, var, op = o.foo()
                 self.assertEqual(vs.name, 'parent/o/foo')
@@ -170,7 +170,7 @@ class InstanceReuseTestCase(tf.test.TestCase):
             # call it for the second time within the object's variable scope
             # and the object's original name scope (this actually will not
             # happen in a regular program).
-            with tf.variable_scope(o.variable_scope,
+            with tf.compat.v1.variable_scope(o.variable_scope,
                                    auxiliary_name_scope=False):
                 with tf.name_scope(o.variable_scope.original_name_scope):
                     vs, var, op = o.foo()
@@ -294,7 +294,7 @@ class GlobalReuseTestCase(tf.test.TestCase):
             self.assertEqual(op.name, 'the_scope_1/op:0')
 
             # now we enter a variable scope, and then call the method twice.
-            with tf.variable_scope('parent'):
+            with tf.compat.v1.variable_scope('parent'):
                 # call the method for the first time
                 vs, var, op = make_var_and_op()
                 self.assertEqual(vs.name, 'the_scope')
@@ -314,7 +314,7 @@ class GlobalReuseTestCase(tf.test.TestCase):
 
         with tf.Graph().as_default():
             # open the parent scope
-            with tf.variable_scope('parent'):
+            with tf.compat.v1.variable_scope('parent'):
                 # test enter for the first time
                 vs, var, op = make_var_and_op()
                 self.assertEqual(vs.name, 'the_scope')
@@ -453,8 +453,8 @@ class ReuseCompatibilityTestCase(tf.test.TestCase):
 
             # test call for the third time,
             # even it is called within another variable scope.
-            # with tf.variable_scope('another'):
-            with tf.variable_scope('another'):
+            # with tf.compat.v1.variable_scope('another'):
+            with tf.compat.v1.variable_scope('another'):
                 o, (vs, var, op) = f()
                 self.assertEqual(o.variable_scope.name, 'f/o')
                 self.assertEqual(vs.name, 'f/o/foo')
@@ -495,7 +495,7 @@ class ReuseCompatibilityTestCase(tf.test.TestCase):
 
             # test call o1 for the second time,
             # even it is called within another variable scope.
-            with tf.variable_scope('another'):
+            with tf.compat.v1.variable_scope('another'):
                 (vs1, var1, op1), (vs2, var2, op2) = o1.foo()
                 self.assertEqual(vs1.name, 'f')
                 self.assertEqual(var1.name, 'f/var:0')
@@ -527,7 +527,7 @@ class ReuseCompatibilityTestCase(tf.test.TestCase):
 
             # Second call to the function will not add new variables,
             # even it is called within another variable scope.
-            with tf.variable_scope('another'):
+            with tf.compat.v1.variable_scope('another'):
                 _ = foo()
                 shape_names = {get_static_shape(v): v.name
                                for v in tf.global_variables()}
@@ -563,7 +563,7 @@ class ReuseCompatibilityTestCase(tf.test.TestCase):
 
             # Second call to the function will not add new variables,
             # even it is called within another variable scope.
-            with tf.variable_scope('another'):
+            with tf.compat.v1.variable_scope('another'):
                 _ = o.foo()
                 shape_names = {get_static_shape(v): v.name
                                for v in tf.global_variables()}
@@ -581,7 +581,7 @@ class VarScopeObjectTestCase(tf.test.TestCase):
             pass
 
         self.assertEqual(repr(MyVarScopeObj(name='a')), "MyVarScopeObj('a')")
-        with tf.variable_scope('parent'):
+        with tf.compat.v1.variable_scope('parent'):
             self.assertEqual(repr(MyVarScopeObj(scope='b')),
                              "MyVarScopeObj('parent/b')")
 
@@ -617,7 +617,7 @@ class VarScopeObjectTestCase(tf.test.TestCase):
         self.assertEqual(o3.variable_scope.original_name_scope, 'o_2/')
 
         # test to construct object under other scope
-        with tf.variable_scope('c'):
+        with tf.compat.v1.variable_scope('c'):
             o4 = MyVarScopeObj(name='o')
             self.assertEqual(o4.name, 'o')
             self.assertEqual(o4.variable_scope.name, 'c/o')

@@ -96,7 +96,7 @@ def dense(input, units,
         bias = bias_spec.validate('bias', bias)
 
     # the main part of the dense layer
-    with tf.variable_scope(scope, default_name=name or 'dense'):
+    with tf.compat.v1.variable_scope(scope, default_name=name or 'dense'):
         # create the variables
         if kernel is None:
             kernel = model_variable(

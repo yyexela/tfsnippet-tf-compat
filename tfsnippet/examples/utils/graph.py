@@ -60,6 +60,6 @@ def add_variable_scope(method):
     @six.wraps(method)
     def wrapper(*args, **kwargs):
         name = kwargs.pop('name', None)
-        with tf.variable_scope(name, default_name=method_name):
+        with tf.compat.v1.variable_scope(name, default_name=method_name):
             return method(*args, **kwargs)
     return wrapper

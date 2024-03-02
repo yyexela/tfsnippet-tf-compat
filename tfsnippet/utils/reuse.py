@@ -63,7 +63,7 @@ def instance_reuse(method_or_scope=None, _sentinel=None, scope=None):
         class Foo(object):
 
             def __init__(self, name):
-                with tf.variable_scope(name) as vs:
+                with tf.compat.v1.variable_scope(name) as vs:
                     self.variable_scope = vs
 
             @instance_reuse
@@ -117,7 +117,7 @@ def instance_reuse(method_or_scope=None, _sentinel=None, scope=None):
         foo.foo_3()  # its name should be variable_scope.name + '/foo/bar2'
 
     The reason to take this behavior is because the TensorFlow seems to have
-    some absurd behavior when using ``tf.variable_scope(..., default_name=?)``
+    some absurd behavior when using ``tf.compat.v1.variable_scope(..., default_name=?)``
     to uniquify the variable scope name.  In some cases we the following
     absurd behavior would appear:
 
@@ -125,7 +125,7 @@ def instance_reuse(method_or_scope=None, _sentinel=None, scope=None):
 
         @global_reuse
         def foo():
-            with tf.variable_scope(None, default_name='bar') as vs:
+            with tf.compat.v1.variable_scope(None, default_name='bar') as vs:
                 return vs
 
         vs1 = foo()  # vs.name == 'foo/bar'
@@ -209,22 +209,22 @@ def instance_reuse(method_or_scope=None, _sentinel=None, scope=None):
             #   desired variable scope.
             if graph.get_name_scope() + '/' != obj_vs.original_name_scope or \
                     tf.compat.v1.get_variable_scope().name != obj_vs.name:
-                with tf.variable_scope(obj_vs, auxiliary_name_scope=False):
+                with tf.compat.v1.variable_scope(obj_vs, auxiliary_name_scope=False):
                     with tf.name_scope(obj_vs.original_name_scope):
                         # now we are here in the object's variable scope, and
                         # its original name scope.  Thus we can now create the
                         # method's variable scope.
-                        with tf.variable_scope(scope) as vs:
+                        with tf.compat.v1.variable_scope(scope) as vs:
                             variable_scopes[obj] = vs
 
-                with tf.variable_scope(vs), _reuse_context(vs):
+                with tf.compat.v1.variable_scope(vs), _reuse_context(vs):
                     return method(*args, **kwargs)
 
             # Branch #1.2: first time to enter the method, and we are just
             #   in the object's variable scope.  So we can happily create a new
             #   variable scope, and just call the method immediately.
             else:
-                with tf.variable_scope(scope) as vs, _reuse_context(vs):
+                with tf.compat.v1.variable_scope(scope) as vs, _reuse_context(vs):
                     variable_scopes[obj] = vs
                     return method(*args, **kwargs)
 
@@ -232,7 +232,7 @@ def instance_reuse(method_or_scope=None, _sentinel=None, scope=None):
             # Branch #2: not the first time to enter the method, so we
             #   should reopen the variable scope with reuse set to `True`.
             vs = variable_scopes[obj]
-            with tf.variable_scope(vs, reuse=True), _reuse_context(vs):
+            with tf.compat.v1.variable_scope(vs, reuse=True), _reuse_context(vs):
                 return method(*args, **kwargs)
 
     return wrapped
@@ -335,17 +335,17 @@ def global_reuse(method_or_scope=None, _sentinel=None, scope=None):
             #   variable scope.
             if graph.get_name_scope() or tf.compat.v1.get_variable_scope().name:
                 with root_variable_scope():
-                    with tf.variable_scope(None, default_name=scope) as vs:
+                    with tf.compat.v1.variable_scope(None, default_name=scope) as vs:
                         variable_scopes[graph] = vs
 
-                with tf.variable_scope(vs), _reuse_context(vs):
+                with tf.compat.v1.variable_scope(vs), _reuse_context(vs):
                     return method(*args, **kwargs)
 
             # Branch #1.2: first time to enter the function, and we are just
             #   in the root variable scope.  So we can happily create a new
             #   variable scope, and just call the method immediately.
             else:
-                with tf.variable_scope(None, default_name=scope) as vs, \
+                with tf.compat.v1.variable_scope(None, default_name=scope) as vs, \
                         _reuse_context(vs):
                     variable_scopes[graph] = vs
                     return method(*args, **kwargs)
@@ -354,7 +354,7 @@ def global_reuse(method_or_scope=None, _sentinel=None, scope=None):
             # Branch #2: not the first time to enter the function, so we
             #   should reopen the variable scope with reuse set to `True`.
             vs = variable_scopes[graph]
-            with tf.variable_scope(vs, reuse=True), _reuse_context(vs):
+            with tf.compat.v1.variable_scope(vs, reuse=True), _reuse_context(vs):
                 return method(*args, **kwargs)
 
     return wrapped

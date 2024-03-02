@@ -130,7 +130,7 @@ class MultiLayerQuadraticFlow(MultiLayerFlow):
                                                       n_layers=n_layers)
         self._flows = []
 
-        with tf.variable_scope(None, default_name='MultiLayerQuadraticFlow'):
+        with tf.compat.v1.variable_scope(None, default_name='MultiLayerQuadraticFlow'):
             for layer_id in range(self.n_layers):
                 self._flows.append(
                     QuadraticFlow(layer_id + 1, layer_id * 2 + 1))

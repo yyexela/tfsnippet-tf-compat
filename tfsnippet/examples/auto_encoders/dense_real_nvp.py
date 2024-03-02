@@ -132,7 +132,7 @@ def main():
         'learning_rate', config.initial_lr, config.lr_anneal_factor)
 
     # build the posterior flow
-    with tf.variable_scope('posterior_flow'):
+    with tf.compat.v1.variable_scope('posterior_flow'):
         flows = []
         for i in range(config.n_flows):
             flows.append(spt.layers.ActNorm())
