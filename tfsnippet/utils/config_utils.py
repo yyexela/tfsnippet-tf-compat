@@ -391,7 +391,7 @@ class _ConfigAction(Action):
 
     def __call__(self, parser, namespace, values, option_string=None):
         try:
-            value = yaml.load(values)
+            value = yaml.safe_load(values)
             self._config_obj[self._config_key] = value
         except Exception as ex:
             message = 'Invalid value for argument `{}`'.format(option_string)
