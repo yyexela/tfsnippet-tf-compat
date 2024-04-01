@@ -231,7 +231,8 @@ class TrainLoop(DisposableContext):
                 self._param_vars,
                 initial_metric=self._initial_valid_metric,
                 smaller_is_better=self._valid_metric_smaller_is_better,
-                checkpoint_dir=self._checkpoint_dir
+                checkpoint_dir=self._checkpoint_dir,
+                cleanup=False
             )
             self._early_stopping.__enter__()
 
