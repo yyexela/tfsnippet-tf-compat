@@ -4,6 +4,7 @@ import copy
 import os
 import re
 import time
+import pathlib
 from collections import OrderedDict
 from contextlib import contextmanager
 
@@ -74,7 +75,8 @@ class TrainLoop(DisposableContext):
                  initial_epoch=0,
                  initial_step=0,
                  max_epoch=None,
-                 max_step=None):
+                 max_step=None,
+                 checkpoint_dir=None):
         """
         Construct the :class:`TrainLoop`.
 
@@ -114,6 +116,9 @@ class TrainLoop(DisposableContext):
             early_stopping (bool): Whether or not to do early-stopping?
                 (default :obj:`False`)  If :obj:`True`, early-stopping will be
                 applied on `param_vars`, according to the validation metric.
+            checkpoint_dir:
+                If specified, this is where we're going to store the early stopping
+                parameters instead of in a temporary directory
             initial_epoch (int or tf.Tensor or tf.Variable): The initial epoch
                 (default 0). Should be one less than the actual first epoch.
             initial_step (int or tf.Tensor or tf.Variable): The initial step
@@ -181,6 +186,7 @@ class TrainLoop(DisposableContext):
         self._step_metrics = None  # type: MetricLogger
         self._epoch_metrics = None  # type: MetricLogger
         self._early_stopping = None  # type: EarlyStopping
+        self._checkpoint_dir = checkpoint_dir
 
         # the active data flow of current epoch
         self._data_flow = None  # type: DataFlow
@@ -224,7 +230,8 @@ class TrainLoop(DisposableContext):
             self._early_stopping = EarlyStopping(
                 self._param_vars,
                 initial_metric=self._initial_valid_metric,
-                smaller_is_better=self._valid_metric_smaller_is_better
+                smaller_is_better=self._valid_metric_smaller_is_better,
+                checkpoint_dir=self._checkpoint_dir
             )
             self._early_stopping.__enter__()
 
